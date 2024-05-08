@@ -1,4 +1,4 @@
-package com.somnwal.android.kakao.highlight.ui.theme
+package com.somnwal.android.kakaobank.highlight.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package com.somnwal.android.kakao.highlight.ui.theme
+package com.somnwal.android.kakaobank.highlight.ui.theme
 
 import android.app.Activity
 import android.os.Build

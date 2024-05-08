@@ -14,4 +14,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Android_KakaoBank_Highlight"
-include ':app'
+include(":app")
+ 

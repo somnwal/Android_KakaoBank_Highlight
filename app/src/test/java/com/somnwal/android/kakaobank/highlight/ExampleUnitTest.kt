@@ -1,4 +1,4 @@
-package com.somnwal.android_kakaobank_highlight
+package com.somnwal.android.kakaobank.highlight
 
 import org.junit.Test
 
