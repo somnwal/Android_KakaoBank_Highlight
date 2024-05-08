@@ -1,3 +1,4 @@
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -6,20 +7,17 @@ plugins {
 }
 
 android {
-    namespace = "com.somnwal.kakaobank.highlight.app"
+    namespace = "com.somnwal.kakaobank.highlight.app.feature.search"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.somnwal.kakaobank.highlight.app"
+        applicationId = "com.somnwal.kakaobank.highlight.app.feature.search"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
     }
 
     buildTypes {
@@ -38,36 +36,16 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
 }
 
 dependencies {
 
-
     implementation(libs.androidx.core.ktx)
 
     implementation(libs.bundles.androidx.compose)
-    implementation(platform(libs.androidx.compose.bom))
-
     implementation(libs.bundles.dagger.hilt)
 
     testImplementation(libs.junit)
-    debugImplementation(libs.bundles.androidx.compose.debug)
-
-    androidTestImplementation(libs.bundles.androidx.compose.test)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-}
-
-kapt {
-    correctErrorTypes = true
+    androidTestImplementation(libs.junit.ext)
+    androidTestImplementation(libs.espresso.core)
 }
