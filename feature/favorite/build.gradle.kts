@@ -2,10 +2,11 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kapt)
 }
 
 android {
-    namespace = "com.somnwal.kakaobank.highlight.app.core.ui"
+    namespace = "com.somnwal.android.kakaobank.app.feature.favorite"
     compileSdk = 34
 
     defaultConfig {
@@ -39,21 +40,19 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
+
 }
 
 dependencies {
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.appcompat)
+    implementation(libs.material)
 
     implementation(libs.bundles.androidx.compose)
     implementation(platform(libs.androidx.compose.bom))
 
-    implementation(libs.hilt.navigation.compose)
-
     testImplementation(libs.junit)
-    debugImplementation(libs.bundles.androidx.compose.debug)
-
-    androidTestImplementation(libs.bundles.androidx.compose.test)
     androidTestImplementation(libs.junit.ext)
     androidTestImplementation(libs.espresso.core)
 }

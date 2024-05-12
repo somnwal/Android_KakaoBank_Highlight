@@ -13,6 +13,7 @@ androidxLifecycle = "2.6.0"
 
 # Compose
 compose = "1.9.0"
+composeCompiler = "1.5.1"
 composeBom = "2023.08.00"
 
 composeMaterial = "1.2.1"
@@ -55,6 +56,7 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "compose" }
 
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
@@ -73,9 +75,9 @@ androidx-compose-ui-manifest = { group = "androidx.compose.ui", name = "ui-test-
 androidx-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 
 # Hilt
-dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
-dagger-hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt"}
-androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose"}
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt"}
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose"}
 
 # Test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -91,6 +93,7 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-compose = [
     "androidx-activity-compose",
     "androidx-compose-lifecycle-runtime",
+    "androidx-compose-runtime",
 
     "androidx-compose-ui",
     "androidx-compose-ui-graphics",
@@ -109,10 +112,4 @@ androidx-compose-debug = [
 
 androidx-compose-test = [
     "androidx-compose-ui-test",
-]
-
-dagger-hilt = [
-    "dagger-hilt-android",
-    "dagger-hilt-android-compiler",
-    "androidx-hilt-navigation-compose"
 ]

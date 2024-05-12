@@ -13,8 +13,12 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Android_KakaoBank_Highlight"
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+rootProject.name = "kakao"
 include(":app")
 include(":core:model")
 include(":core:ui")
 include(":feature:search")
+include(":feature:favorite")
+
