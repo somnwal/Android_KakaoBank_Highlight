@@ -26,6 +26,9 @@ composePaging = "3.2.1"
 hilt = "2.48"
 hiltNavigationCompose = "1.2.0"
 
+# Retrofit
+retrofit = "2.9.0"
+
 ## Test
 junit = "4.13.2"
 junitExt = "1.1.5"
@@ -84,6 +87,10 @@ hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt"}
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose"}
 
+# Retrofit
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+
 # Test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 junit-ext = { group = "androidx.test.ext", name = "junit", version.ref = "junitExt" }
@@ -110,6 +117,11 @@ androidx-compose = [
     "androidx-compose-paging",
 ]
 
+squareup-retrofit = [
+    "retrofit",
+    "retrofit-converter-gson",
+]
+
 androidx-compose-debug = [
     "androidx-compose-ui-tooling",
     "androidx-compose-ui-manifest",
@@ -118,3 +130,4 @@ androidx-compose-debug = [
 androidx-compose-test = [
     "androidx-compose-ui-test",
 ]
+

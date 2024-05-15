@@ -18,6 +18,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+    }
 }
 
 dependencies {

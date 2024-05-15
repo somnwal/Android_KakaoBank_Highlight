@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.somnwal.android.kakaobank.app.feature.search.component.KakaoSearchBar
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     state: SearchUiState,

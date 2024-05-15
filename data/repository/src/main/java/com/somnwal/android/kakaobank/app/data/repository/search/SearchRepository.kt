@@ -5,4 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface SearchRepository {
     val observeSearchDataList : Flow<List<SearchData>>
+
+    suspend fun search(query: String, sort: String, page: Int)
 }

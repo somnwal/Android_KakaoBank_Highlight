@@ -29,6 +29,8 @@ android {
 
 dependencies {
     implementation(projects.core.ui)
+    implementation(projects.data.model)
+    implementation(projects.data.repository)
 
     implementation(libs.bundles.androidx.compose)
     implementation(platform(libs.androidx.compose.bom))
