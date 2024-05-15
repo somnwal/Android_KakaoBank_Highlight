@@ -55,7 +55,7 @@ dependencies {
 
     implementation(projects.core.ui)
     implementation(projects.feature.search)
-    implementation(projects.feature.favorite)
+//    implementation(projects.feature.favorite)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)

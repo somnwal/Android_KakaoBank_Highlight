@@ -17,8 +17,11 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "kakao"
 include(":app")
-include(":core:model")
 include(":core:ui")
+
+include(":data:repository")
+include(":data:api")
+
 include(":feature:search")
 include(":feature:favorite")
-
+include(":data:model")
