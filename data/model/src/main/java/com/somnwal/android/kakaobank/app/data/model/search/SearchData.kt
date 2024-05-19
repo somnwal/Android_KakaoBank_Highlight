@@ -7,6 +7,11 @@ enum class SearchDataType {
     VIDEO
 }
 
+data class SearchResult (
+    val isNextPageExist: Boolean,
+    val resultList: List<SearchData>
+)
+
 data class SearchData (
     val type: SearchDataType,
     val title: String,

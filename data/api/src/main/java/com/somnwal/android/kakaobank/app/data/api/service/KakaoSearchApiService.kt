@@ -5,14 +5,15 @@ import com.somnwal.android.kakaobank.app.data.api.model.KakaoSearchApiResponse
 import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface KakaoSearchApiService {
 
-    @GET("/v2/search/web")
+    @GET("/v2/search/image")
     suspend fun search(
-        @Field("query") query: String,
-        @Field("sort") sort: String,
-        @Field("page") page: Int,
-        @Field("size") size: Int = ServerConfig.KAKAO_API_SEARCH_PAGE_SIZE,
+        @Query("query") query: String,
+        @Query("sort") sort: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int = ServerConfig.KAKAO_API_SEARCH_PAGE_SIZE,
     ) : Response<KakaoSearchApiResponse>
 }

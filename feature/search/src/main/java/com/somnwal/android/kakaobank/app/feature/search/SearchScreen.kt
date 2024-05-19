@@ -3,50 +3,76 @@ package com.somnwal.android.kakaobank.app.feature.search
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
-import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.somnwal.android.kakaobank.app.feature.search.component.KakaoSearchBar
+import com.somnwal.android.kakaobank.app.feature.search.state.SearchModelUiState
+import com.somnwal.android.kakaobank.app.feature.search.state.SearchUiState
 
 @Composable
 fun SearchScreen(
-    state: SearchUiState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    uiState: SearchUiState,
+    modelUiState: SearchModelUiState,
+    onQuery: (String, String, Int) -> Unit,
 ) {
     Column (
         modifier = Modifier
             .fillMaxSize(),
     ) {
-        KakaoSearchBar()
+        var queryState by rememberSaveable { mutableStateOf("고양이") }
+        var sortState by rememberSaveable { mutableStateOf("accuracy") }
+        var pageState by rememberSaveable { mutableIntStateOf(1) }
 
-        when(state) {
-            SearchUiState.Success -> SearchResultContent(items = state.data, onItemClick = )
+        KakaoSearchBar(
+            query = queryState,
+            onQuery = {
+                onQuery(queryState, sortState, pageState)
+            },
+            onQueryChange = { changedQuery ->
+                queryState = changedQuery
+            }
+        )
+
+        when(uiState) {
+            SearchUiState.IDLE,
+            SearchUiState.SUCCESS -> {
+                SearchResultContent(
+                    modelUiState = modelUiState,
+                    onItemClick = {
+
+                    }
+                )
+            }
+            SearchUiState.LOADING -> TODO()
+            SearchUiState.ERROR -> TODO()
         }
     }
 }
 
 @Composable
 internal fun SearchResultContent(
-    items: List<SearchUiState>,
+    modifier: Modifier = Modifier,
+    modelUiState: SearchModelUiState,
     onItemClick: (Long) -> Unit,
-    modifier: Modifier = Modifier
 ) {
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
     ) {
-        itemsIndexed(items = items) { index, item ->
+        itemsIndexed(items = modelUiState.items) { index, item ->
             ListItem(
-                headlineContent = { Text(text = item.toString()) },
+                headlineContent = { Text(text = item.title) },
                 trailingContent = { },
                 leadingContent = { },
                 modifier = Modifier

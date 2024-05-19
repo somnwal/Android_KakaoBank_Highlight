@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.somnwal.android.kakaobank.app.feature.favorite.FavoriteScreen
+import com.somnwal.android.kakaobank.app.feature.search.SearchRoute
 import com.somnwal.android.kakaobank.app.feature.search.SearchScreen
 
 @Composable
@@ -16,11 +16,14 @@ fun KakaoNavHost(
 ) {
     NavHost(navController = navController, startDestination = startDestination) {
         composable(NavScreen.SearchScreen.route) {
-            SearchScreen()
+            SearchRoute(
+                onNavigate = {
+
+                }
+            )
         }
 
         composable(NavScreen.FavoriteScreen.route) {
-            FavoriteScreen()
         }
     }
 }

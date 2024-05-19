@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kapt)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -34,6 +35,9 @@ dependencies {
 
     implementation(libs.bundles.androidx.compose)
     implementation(platform(libs.androidx.compose.bom))
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
 
     implementation(libs.hilt.navigation.compose)
 }

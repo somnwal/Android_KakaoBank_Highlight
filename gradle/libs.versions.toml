@@ -18,7 +18,7 @@ composeBom = "2023.08.00"
 
 composeMaterial = "1.2.1"
 
-composeNavigation = "2.5.3"
+composeNavigation = "2.7.7"
 composeConstraintlayout = "3.1.1"
 composePaging = "3.2.1"
 
@@ -28,6 +28,7 @@ hiltNavigationCompose = "1.2.0"
 
 # Retrofit
 retrofit = "2.9.0"
+loggingInterceptor = "4.10.0"
 
 ## Test
 junit = "4.13.2"
@@ -90,6 +91,7 @@ hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-com
 # Retrofit
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+retrofit-logging-interceptor = { group ="com.squareup.okhttp3", name = "logging-interceptor", version.ref = "loggingInterceptor" }
 
 # Test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -120,6 +122,7 @@ androidx-compose = [
 squareup-retrofit = [
     "retrofit",
     "retrofit-converter-gson",
+    "retrofit-logging-interceptor",
 ]
 
 androidx-compose-debug = [
