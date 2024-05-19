@@ -18,6 +18,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.somnwal.android.kakaobank.app.feature.search.component.KakaoSearchBar
 import com.somnwal.android.kakaobank.app.feature.search.state.SearchModelUiState
 import com.somnwal.android.kakaobank.app.feature.search.state.SearchUiState
+import com.somnwal.kakaobank.highlight.app.core.ui.common.component.MediaItemCard
 
 @Composable
 fun SearchScreen(
@@ -31,7 +32,7 @@ fun SearchScreen(
             .fillMaxSize(),
     ) {
         var queryState by rememberSaveable { mutableStateOf("고양이") }
-        var sortState by rememberSaveable { mutableStateOf("accuracy") }
+        var sortState by rememberSaveable { mutableStateOf("recency") }
         var pageState by rememberSaveable { mutableIntStateOf(1) }
 
         KakaoSearchBar(
@@ -71,14 +72,8 @@ internal fun SearchResultContent(
             .fillMaxSize()
     ) {
         itemsIndexed(items = modelUiState.items) { index, item ->
-            ListItem(
-                headlineContent = { Text(text = item.title) },
-                trailingContent = { },
-                leadingContent = { },
-                modifier = Modifier
-                    .clickable {
-                        onItemClick(0)
-                    }
+            MediaItemCard(
+                data = item
             )
         }
     }

@@ -30,7 +30,7 @@ class SearchViewModel @Inject constructor(
 
     private val _modelUiState : MutableStateFlow<SearchModelUiState> =
         MutableStateFlow(
-            SearchModelUiState("", "accuracy", 1, false, listOf())
+            SearchModelUiState("", "recency", 1, false, listOf())
         )
 
     val modelUiState : StateFlow<SearchModelUiState>

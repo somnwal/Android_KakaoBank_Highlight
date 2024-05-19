@@ -18,6 +18,9 @@ composeBom = "2023.08.00"
 
 composeMaterial = "1.2.1"
 
+# coil
+coil = "2.2.2"
+
 composeNavigation = "2.7.7"
 composeConstraintlayout = "3.1.1"
 composePaging = "3.2.1"
@@ -76,6 +79,11 @@ androidx-compose-navigation = { group = "androidx.navigation", name = "navigatio
 androidx-compose-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-compose-paging = { group = "androidx.paging", name = "paging-compose", version.ref = "composePaging" }
 
+# coil
+coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+coil-kt-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }
+
 # Compose-Debug
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
@@ -123,6 +131,12 @@ squareup-retrofit = [
     "retrofit",
     "retrofit-converter-gson",
     "retrofit-logging-interceptor",
+]
+
+coil-compose = [
+    "coil-kt",
+    "coil-kt-compose",
+    "coil-kt-svg"
 ]
 
 androidx-compose-debug = [
