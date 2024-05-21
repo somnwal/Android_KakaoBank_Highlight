@@ -29,3 +29,74 @@
 * 검색 데이터는 https://developers.kakao.com/product/search 의 Open API를 사용합니다.
   오픈 소스 사용 가능합니다. 참고로 카카오뱅크에서는 retrofit, kotlinx-coroutines-android, rxjava 등을 사용하고 있습니다.
 ```
+
+### 프로젝트 구조
+
+|       모듈명       |           설명           |
+|:-----------------|:------------------------|
+| :app             | 앱                      |
+| :core            | 공통/핵심 모듈             |
+| :core:ui         |  UI 컴포넌트, 테마 등 관리   |
+| :data            | 데이터 관리 모듈            |
+| :data:model      | 데이터 모델 정의            |
+| :data:api        | Api 호출 관리             |
+| :data:repository | 데이터 Repository 관리     |
+| :feature         | 실질적인 화면 구현          |
+| :feature:search  | 검색 화면 구현             |
+| :feature:favorite| 보관함 화면 구현            |
+
+<br/><br/><br/>
+
+```mermaid
+stateDiagram
+
+project --> app
+project --> core
+project --> data
+project --> feature
+
+core --> ui
+
+data --> api
+data --> model
+data --> repository
+
+feature --> search
+feature --> favorite
+```
+
+
+### 사용 라이브러리 (요약본)
+
+- Compose UI
+```kotlin
+compose = "1.9.0"
+composeCompiler = "1.5.1"
+composeBom = "2023.08.00"
+composeMaterial = "1.2.1"
+```
+
+- 의존성 주입 (DI)
+```kotlin
+hilt = "2.48"
+hiltNavigationCompose = "1.2.0"
+```
+
+- API 호출
+```kotlin
+retrofit = "2.9.0"
+retrofit-converter-gson = "2.9.0"
+retrofit-adapter-rxjava3 = "2.9.0"
+loggingInterceptor = "4.10.0"
+```
+
+- Reactive Programming
+```
+rxKotlin = "3.0.1"
+rxAndroid = "3.0.1"
+```
+
+- 이미지로딩
+```kotlin
+coil = "2.2.2"
+```
