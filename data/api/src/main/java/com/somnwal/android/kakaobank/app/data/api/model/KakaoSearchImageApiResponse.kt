@@ -3,15 +3,15 @@ package com.somnwal.android.kakaobank.app.data.api.model
 import com.google.gson.annotations.SerializedName
 import java.util.Date
 
-data class KakaoSearchApiResponse (
+data class KakaoSearchImageApiResponse (
     @SerializedName("meta")
-    val meta: KakaoSearchApiMetaData,
+    val meta: KakaoSearchImageApiMetaData,
 
     @SerializedName("documents")
-    val documents: List<KakaoSearchApiDocumentsData>
+    val documents: List<KakaoSearchImageApiDocumentsData>
 )
 
-data class KakaoSearchApiMetaData (
+data class KakaoSearchImageApiMetaData (
     @SerializedName("total_count")
     val totalCount: Int,
 
@@ -22,7 +22,7 @@ data class KakaoSearchApiMetaData (
     val isEnd: Boolean
 )
 
-data class KakaoSearchApiDocumentsData (
+data class KakaoSearchImageApiDocumentsData (
     @SerializedName("collection")
     val collection: String,
 

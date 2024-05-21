@@ -17,9 +17,8 @@ data class SearchData (
     val title: String,
 
     val thumbnailUrl: String,
-    val imageUrl: String,
-    val docUrl: String,
+    val url: String,
 
-    val timestamp: Date,
+    val datetime: Date,
     val isFavorite: Boolean = false
 )

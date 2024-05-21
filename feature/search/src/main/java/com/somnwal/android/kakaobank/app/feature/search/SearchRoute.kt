@@ -21,8 +21,10 @@ fun SearchRoute(
     SearchScreen(
         uiState = uiState,
         modelUiState = modelUiState,
-        onQuery = { query, sort, page ->
-            viewModel.search(query, sort, page)
+        onQuery = { query, sort, page, isFirst ->
+            if(isFirst || modelUiState.isNextPageExist) {
+                viewModel.search(query, sort, page, isFirst)
+            }
         }
     )
 }

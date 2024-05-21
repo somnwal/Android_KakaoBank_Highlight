@@ -35,5 +35,5 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
 
     implementation(libs.bundles.coil.compose)
-    debugImplementation(libs.bundles.androidx.compose.debug)
+    implementation(libs.bundles.androidx.compose.debug)
 }

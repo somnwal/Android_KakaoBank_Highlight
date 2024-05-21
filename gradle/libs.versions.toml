@@ -33,6 +33,11 @@ hiltNavigationCompose = "1.2.0"
 retrofit = "2.9.0"
 loggingInterceptor = "4.10.0"
 
+# RxKotlin
+
+rxKotlin = "3.0.1"
+kotlinxCoroutines = "1.7.3"
+
 ## Test
 junit = "4.13.2"
 junitExt = "1.1.5"
@@ -99,7 +104,14 @@ hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-com
 # Retrofit
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+retrofit-adapter-rxjava3 = { group = "com.squareup.retrofit2", name = "adapter-rxjava3", version.ref = "retrofit" }
 retrofit-logging-interceptor = { group ="com.squareup.okhttp3", name = "logging-interceptor", version.ref = "loggingInterceptor" }
+
+# RxKotlin
+rx-kotlin = { group = "io.reactivex.rxjava3", name = "rxkotlin", version.ref = "rxKotlin" }
+rx-android = { group = "io.reactivex.rxjava3", name = "rxandroid", version.ref = "rxKotlin" }
+
+kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 
 # Test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -130,6 +142,7 @@ androidx-compose = [
 squareup-retrofit = [
     "retrofit",
     "retrofit-converter-gson",
+    "retrofit-adapter-rxjava3",
     "retrofit-logging-interceptor",
 ]
 
@@ -137,6 +150,12 @@ coil-compose = [
     "coil-kt",
     "coil-kt-compose",
     "coil-kt-svg"
+]
+
+rx-kotlin = [
+    "rx-android",
+    "rx-kotlin",
+    "kotlinx-coroutines"
 ]
 
 androidx-compose-debug = [

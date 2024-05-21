@@ -27,4 +27,5 @@ dependencies {
     kapt(libs.hilt.android.compiler)
 
     implementation(libs.bundles.squareup.retrofit)
+    implementation(libs.bundles.rx.kotlin)
 }

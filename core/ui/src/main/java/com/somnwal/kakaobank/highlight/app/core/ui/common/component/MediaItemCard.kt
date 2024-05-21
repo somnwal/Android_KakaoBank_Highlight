@@ -1,7 +1,6 @@
 package com.somnwal.kakaobank.highlight.app.core.ui.common.component
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -30,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
@@ -52,7 +52,7 @@ fun MediaItemCard(
     val localDensity = LocalDensity.current
 
     var dateFormatter = SimpleDateFormat("yyyy-MM-dd HH:mm")
-    var formattedDateText = dateFormatter.format(data.timestamp)
+    var formattedDateText = dateFormatter.format(data.datetime)
 
     var imageUrl by remember { mutableStateOf(data.thumbnailUrl) }
     var imageLoading by remember { mutableStateOf(false) }
@@ -62,7 +62,7 @@ fun MediaItemCard(
     LaunchedEffect(isExpanded) {
         if (isExpanded) {
             imageDisplayRatio = 1f
-            imageUrl = data.imageUrl
+            imageUrl = data.url
         } else {
             imageDisplayRatio = 0.3f
             imageUrl = data.thumbnailUrl
@@ -98,12 +98,26 @@ fun MediaItemCard(
                     .fillMaxWidth(imageDisplayRatio)
                     .aspectRatio(1f),
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(data.imageUrl)
+                    .data(data.thumbnailUrl)
                     .size(imageSize)
                     .crossfade(true)
                     .build(),
                 contentScale = ContentScale.Crop,
                 contentDescription = "이미지"
+            )
+
+            Icon(
+                modifier = Modifier
+                    .size(36.dp)
+                    .padding(6.dp)
+                    .align(Alignment.BottomStart),
+                imageVector = if(data.type == SearchDataType.IMAGE) {
+                    AppIcons.ICON_IMAGE_OUTLINED
+                } else {
+                    AppIcons.ICON_VIDEO_OUTLINED
+                },
+                tint = Color.White,
+                contentDescription = "파일 형식"
             )
 
             Column(
@@ -117,7 +131,9 @@ fun MediaItemCard(
                 Text(
                     modifier = Modifier
                         .wrapContentHeight(),
-                    text = data.title
+                    text = data.title,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
                 )
 
                 Text(
@@ -135,7 +151,7 @@ fun MediaItemCard(
                 Icon(
                     modifier = Modifier
                         .size(36.dp)
-                        .padding(4.dp)
+                        .padding(6.dp)
                         .clickable(
                             onClick = {
 
@@ -156,11 +172,11 @@ fun MediaItemCard(
 
 @Preview(
     showBackground = true,
-    widthDp = 300,
+    widthDp = 420,
     heightDp = 120
 )
 @Composable
-fun MediaItemCardPreview() {
+fun MediaItemImageCardPreview() {
     AppTheme() {
         Box(
             modifier = Modifier
@@ -169,14 +185,39 @@ fun MediaItemCardPreview() {
            MediaItemCard(
                data = SearchData(
                    type = SearchDataType.IMAGE,
-                   title = "테스트",
-                   docUrl = "https://github.com/somnwal",
-                   imageUrl = "https://avatars.githubusercontent.com/u/90139018?v=4",
+                   title = "이미지",
+                   url = "https://avatars.githubusercontent.com/u/90139018?v=4",
                    thumbnailUrl = "https://avatars.githubusercontent.com/u/90139018?v=4",
-                   timestamp = Date(),
+                   datetime = Date(),
                    isFavorite = false,
                ),
            )
+        }
+    }
+}
+
+@Preview(
+    showBackground = true,
+    widthDp = 420,
+    heightDp = 120
+)
+@Composable
+fun MediaItemVideoCardPreview() {
+    AppTheme() {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            MediaItemCard(
+                data = SearchData(
+                    type = SearchDataType.VIDEO,
+                    title = "동영상",
+                    url = "https://avatars.githubusercontent.com/u/90139018?v=4",
+                    thumbnailUrl = "https://avatars.githubusercontent.com/u/90139018?v=4",
+                    datetime = Date(),
+                    isFavorite = false,
+                ),
+            )
         }
     }
 }
