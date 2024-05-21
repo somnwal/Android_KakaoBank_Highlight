@@ -65,6 +65,7 @@ feature --> search
 feature --> favorite
 ```
 
+<br/><br/>
 
 ### 사용 라이브러리 (요약본)
 
@@ -91,7 +92,7 @@ loggingInterceptor = "4.10.0"
 ```
 
 - Reactive Programming
-```
+```kotlin
 rxKotlin = "3.0.1"
 rxAndroid = "3.0.1"
 ```
