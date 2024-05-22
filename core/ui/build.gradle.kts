@@ -27,13 +27,4 @@ android {
 }
 
 dependencies {
-    implementation(projects.data.model)
-
-    implementation(libs.bundles.androidx.compose)
-    implementation(platform(libs.androidx.compose.bom))
-
-    implementation(libs.hilt.navigation.compose)
-
-    implementation(libs.bundles.coil.compose)
-    implementation(libs.bundles.androidx.compose.debug)
 }

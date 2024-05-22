@@ -1,4 +1,6 @@
 pluginManagement {
+    includeBuild("build-logic")
+
     repositories {
         google()
         mavenCentral()
@@ -18,11 +20,16 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "kakao"
 include(":app")
-include(":core:ui")
 
-include(":data:repository")
-include(":data:api")
+include(
+    ":core:ui",
+    ":core:model",
+    ":core:api",
+    ":core:repository",
+)
 
-include(":feature:search")
-include(":feature:favorite")
-include(":data:model")
+include(
+    ":feature:main",
+    ":feature:search",
+    ":feature:favorite",
+)

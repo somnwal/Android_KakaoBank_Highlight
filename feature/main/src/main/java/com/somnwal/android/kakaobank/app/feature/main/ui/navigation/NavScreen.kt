@@ -1,4 +1,4 @@
-package com.somnwal.kakaobank.highlight.app.ui.navigation
+package com.somnwal.android.kakaobank.app.feature.main.ui.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.somnwal.kakaobank.highlight.app.core.ui.icon.AppIcons

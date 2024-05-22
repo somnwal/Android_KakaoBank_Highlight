@@ -21,11 +21,10 @@ android {
 }
 
 dependencies {
-    implementation(projects.data.model)
+    implementation(projects.core.model)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
 
     implementation(libs.bundles.squareup.retrofit)
-    implementation(libs.bundles.rx.kotlin)
 }

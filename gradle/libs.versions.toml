@@ -3,74 +3,64 @@
 # ==================================================================================================
 [versions]
 # Plugin
-androidGradlePlugin = "8.2.2"
-kotlinPlugin = "1.9.0"
+androidGradlePlugin = "8.3.2"
+kotlinPlugin = "1.9.24"
 
 # Common
 ktx = "1.13.1"
-kotlin = "1.9.0"
-androidxLifecycle = "2.6.0"
+kotlin = "1.9.24"
+androidxLifecycle = "2.8.0"
 
 # Compose
-compose = "1.9.0"
 composeCompiler = "1.5.1"
-composeBom = "2023.08.00"
+composeBom = "2024.05.00"
 
 composeMaterial = "1.2.1"
 
 # coil
-coil = "2.2.2"
+coil = "2.6.0"
 
 composeNavigation = "2.7.7"
 composeConstraintlayout = "3.1.1"
 composePaging = "3.2.1"
 
 # Hilt
-hilt = "2.48"
+hilt = "2.51.1"
 hiltNavigationCompose = "1.2.0"
 
 # Retrofit
-retrofit = "2.9.0"
-loggingInterceptor = "4.10.0"
+retrofit = "2.11.0"
+loggingInterceptor = "4.12.0"
 
-# RxKotlin
-
-rxKotlin = "3.0.1"
-kotlinxCoroutines = "1.7.3"
+# Coroutines
+coroutines = "1.8.1"
 
 ## Test
 junit = "4.13.2"
 junitExt = "1.1.5"
 espressoCore = "3.5.1"
 appcompat = "1.6.1"
-material = "1.11.0"
-
-# ==================================================================================================
-# 플러그인에 대한 정보 ===================================================================================
-# ==================================================================================================
-[plugins]
-android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
-android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinPlugin" }
-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinPlugin" }
-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
-
-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+material = "1.12.0"
 
 # ==================================================================================================
 # 라이브러리 정의 ======================================================================================
 # ==================================================================================================
 [libraries]
 
-android-tools-build-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
+android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 hilt-gradle-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt" }
 
 # ktx
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
 
+# AppCompat
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
 # Compose
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "compose" }
+androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
+androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
@@ -81,13 +71,7 @@ androidx-compose-material-iconsExtended = { group = "androidx.compose.material",
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "composeMaterial"}
 
 androidx-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "composeNavigation"}
-androidx-compose-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
-androidx-compose-paging = { group = "androidx.paging", name = "paging-compose", version.ref = "composePaging" }
-
-# coil
-coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
-coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
-coil-kt-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }
+#androidx-compose-paging = { group = "androidx.paging", name = "paging-compose", version.ref = "composePaging" }
 
 # Compose-Debug
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
@@ -95,6 +79,10 @@ androidx-compose-ui-manifest = { group = "androidx.compose.ui", name = "ui-test-
 
 # Compose Test
 androidx-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+
+# Coroutines
+coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 
 # Hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
@@ -107,37 +95,23 @@ retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-
 retrofit-adapter-rxjava3 = { group = "com.squareup.retrofit2", name = "adapter-rxjava3", version.ref = "retrofit" }
 retrofit-logging-interceptor = { group ="com.squareup.okhttp3", name = "logging-interceptor", version.ref = "loggingInterceptor" }
 
-# RxKotlin
-rx-kotlin = { group = "io.reactivex.rxjava3", name = "rxkotlin", version.ref = "rxKotlin" }
-rx-android = { group = "io.reactivex.rxjava3", name = "rxandroid", version.ref = "rxKotlin" }
+# coil
+coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+coil-kt-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }
 
-kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 
 # Test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 junit-ext = { group = "androidx.test.ext", name = "junit", version.ref = "junitExt" }
 espresso-core = { group ="androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+
 
 # ==================================================================================================
 # 라이브러리 번들 정의 ===================================================================================
 # ==================================================================================================
 [bundles]
-androidx-compose = [
-    "androidx-activity-compose",
-    "androidx-compose-lifecycle-runtime",
-    "androidx-compose-runtime",
-
-    "androidx-compose-ui",
-    "androidx-compose-ui-graphics",
-    "androidx-compose-ui-tooling-preview",
-    "androidx-compose-material-iconsExtended",
-    "androidx-compose-material3",
-
-    "androidx-compose-navigation",
-    "androidx-compose-paging",
-]
 
 squareup-retrofit = [
     "retrofit",
@@ -152,18 +126,14 @@ coil-compose = [
     "coil-kt-svg"
 ]
 
-rx-kotlin = [
-    "rx-android",
-    "rx-kotlin",
-    "kotlinx-coroutines"
-]
 
-androidx-compose-debug = [
-    "androidx-compose-ui-tooling",
-    "androidx-compose-ui-manifest",
-]
-
-androidx-compose-test = [
-    "androidx-compose-ui-test",
-]
-
+# ==================================================================================================
+# 플러그인에 대한 정보 ===================================================================================
+# ==================================================================================================
+[plugins]
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinPlugin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinPlugin" }
+kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }

@@ -1,4 +1,4 @@
-package com.somnwal.kakaobank.highlight.app
+package com.somnwal.android.kakaobank.app.feature.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

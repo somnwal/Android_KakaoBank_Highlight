@@ -1,4 +1,4 @@
-package com.somnwal.kakaobank.highlight.app
+package com.somnwal.android.kakaobank.app.feature.main
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -11,8 +11,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.somnwal.kakaobank.highlight.app.core.ui.common.navigation.BottomNavBar
 import com.somnwal.kakaobank.highlight.app.core.ui.common.navigation.BottomNavBarItem
-import com.somnwal.kakaobank.highlight.app.ui.navigation.KakaoNavHost
-import com.somnwal.kakaobank.highlight.app.ui.navigation.NavScreen
+import com.somnwal.android.kakaobank.app.feature.main.ui.navigation.KakaoNavHost
+import com.somnwal.android.kakaobank.app.feature.main.ui.navigation.NavScreen
 
 @Composable
 fun KakaoApp() {

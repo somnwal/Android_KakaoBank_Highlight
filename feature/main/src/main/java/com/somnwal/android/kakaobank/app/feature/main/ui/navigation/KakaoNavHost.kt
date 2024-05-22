@@ -1,13 +1,10 @@
-package com.somnwal.kakaobank.highlight.app.ui.navigation
+package com.somnwal.android.kakaobank.app.feature.main.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.somnwal.android.kakaobank.app.feature.search.SearchRoute
-import com.somnwal.android.kakaobank.app.feature.search.SearchScreen
 
 @Composable
 fun KakaoNavHost(
