@@ -9,13 +9,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.somnwal.kakaobank.highlight.app.core.ui.common.navigation.BottomNavBar
-import com.somnwal.kakaobank.highlight.app.core.ui.common.navigation.BottomNavBarItem
 import com.somnwal.android.kakaobank.app.feature.main.ui.navigation.KakaoNavHost
 import com.somnwal.android.kakaobank.app.feature.main.ui.navigation.NavScreen
 
 @Composable
-fun KakaoApp() {
+internal fun KakaoApp() {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
 

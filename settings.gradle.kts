@@ -22,10 +22,11 @@ rootProject.name = "kakao"
 include(":app")
 
 include(
-    ":core:ui",
+    ":core:data",
+    ":core:data-api",
+    ":core:designsystem",
     ":core:model",
     ":core:api",
-    ":core:repository",
 )
 
 include(

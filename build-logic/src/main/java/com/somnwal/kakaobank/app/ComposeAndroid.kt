@@ -23,11 +23,6 @@ internal fun Project.configureComposeAndroid() {
 
             add("implementation", platform(bom))
 
-//            add("implementation", libs.findLibrary("androidx-activity-compose").get())
-//            add("implementation", libs.findLibrary("androidx-compose-lifecycle-runtime").get())
-//            add("implementation", libs.findLibrary("androidx-compose-runtime").get())
-
-
             add("implementation", libs.findLibrary("androidx.compose.material3").get())
             add("implementation", libs.findLibrary("androidx.compose.ui").get())
             add("implementation", libs.findLibrary("androidx.compose.ui.graphics").get())
