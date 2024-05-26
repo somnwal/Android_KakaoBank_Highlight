@@ -9,13 +9,12 @@ kotlinPlugin = "1.9.24"
 # Common
 ktx = "1.13.1"
 kotlin = "1.9.24"
-androidxLifecycle = "2.8.0"
+androidxLifecycle = "2.7.0"
 androidxActivity = "1.9.0"
 
 # Compose
-composeCompiler = "1.5.1"
+composeCompiler = "1.5.14"
 composeBom = "2024.05.00"
-
 composeMaterial = "1.2.1"
 
 # coil
@@ -23,7 +22,7 @@ coil = "2.6.0"
 
 composeNavigation = "2.7.7"
 composeConstraintlayout = "3.1.1"
-composePaging = "3.2.1"
+composePaging = "3.3.0"
 
 # Hilt
 hilt = "2.51.1"
@@ -32,9 +31,13 @@ hiltNavigationCompose = "1.2.0"
 # Retrofit
 retrofit = "2.11.0"
 loggingInterceptor = "4.12.0"
+kotlinxImmutable = "0.3.7"
 
 # Coroutines
 coroutines = "1.8.1"
+
+# DataStore
+androidxDatastore = "1.1.1"
 
 ## Test
 junit = "4.13.2"
@@ -86,16 +89,19 @@ androidx-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-juni
 coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 
+# DataStore
+androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidxDatastore" }
+
 # Hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt"}
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose"}
 
 # Retrofit
-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
-retrofit-adapter-rxjava3 = { group = "com.squareup.retrofit2", name = "adapter-rxjava3", version.ref = "retrofit" }
-retrofit-logging-interceptor = { group ="com.squareup.okhttp3", name = "logging-interceptor", version.ref = "loggingInterceptor" }
+okhttp-logging-interceptor = { group ="com.squareup.okhttp3", name = "logging-interceptor", version.ref = "loggingInterceptor" }
+kotlinx-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinxImmutable" }
 
 # coil
 coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
@@ -108,26 +114,10 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 junit-ext = { group = "androidx.test.ext", name = "junit", version.ref = "junitExt" }
 espresso-core = { group ="androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 
-
-
 # ==================================================================================================
 # 라이브러리 번들 정의 ===================================================================================
 # ==================================================================================================
 [bundles]
-
-squareup-retrofit = [
-    "retrofit",
-    "retrofit-converter-gson",
-    "retrofit-adapter-rxjava3",
-    "retrofit-logging-interceptor",
-]
-
-coil-compose = [
-    "coil-kt",
-    "coil-kt-compose",
-    "coil-kt-svg"
-]
-
 
 # ==================================================================================================
 # 플러그인에 대한 정보 ===================================================================================

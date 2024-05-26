@@ -24,9 +24,9 @@ include(":app")
 include(
     ":core:data",
     ":core:data-api",
+    ":core:datastore",
     ":core:designsystem",
     ":core:model",
-    ":core:api",
 )
 
 include(
@@ -34,3 +34,4 @@ include(
     ":feature:search",
     ":feature:favorite",
 )
+include(":core:domain")

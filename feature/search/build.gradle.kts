@@ -1,32 +1,19 @@
+import com.somnwal.kakaobank.app.common.setNamespace
+
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kapt)
+    id("somnwal.kakaobank.android.feature")
+
 }
 
 android {
-    namespace = "com.somnwal.android.kakaobank.app.feature.search"
-    compileSdk = 34
-
-    defaultConfig {
-        minSdk = 24
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildFeatures {
-        compose = true
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
-    }
+    setNamespace("feature.search")
 }
 
 dependencies {
+    implementation(libs.kotlinx.immutable)
 
+    implementation(libs.coil.kt)
+    implementation(libs.coil.kt.compose)
+    implementation(libs.coil.kt.svg)
 }

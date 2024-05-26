@@ -3,26 +3,34 @@ package com.somnwal.android.kakaobank.app.feature.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
+import androidx.activity.viewModels
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.somnwal.android.kakaobank.app.feature.main.ui.navigation.MainNavigator
+import com.somnwal.android.kakaobank.app.feature.main.ui.navigation.rememberMainNavigator
 import com.somnwal.kakaobank.app.core.designsystem.theme.KakaoTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private val mainViewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         setContent {
+            val isDarkTheme by mainViewModel.isDarkTheme.collectAsStateWithLifecycle(initialValue = false, this)
+
+            val navigator: MainNavigator = rememberMainNavigator()
+
             KakaoTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    KakaoApp()
-                }
+                MainScreen(
+                    navigator = navigator,
+                    onChangeTheme = { isDarkTheme ->
+                        mainViewModel.updateIsDarkTheme(isDarkTheme)
+                    }
+                )
             }
         }
     }

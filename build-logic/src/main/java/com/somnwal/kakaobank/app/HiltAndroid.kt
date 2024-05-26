@@ -7,7 +7,7 @@ import org.gradle.kotlin.dsl.dependencies
 
 internal fun Project.configureHiltAndroid() {
     with(pluginManager) {
-        apply("org.jetbrains.kotlin.android")
+        apply("dagger.hilt.android.plugin")
         apply("org.jetbrains.kotlin.kapt")
     }
 
@@ -16,6 +16,7 @@ internal fun Project.configureHiltAndroid() {
     dependencies {
         "implementation"(libs.findLibrary("hilt.android").get())
         "kapt"(libs.findLibrary("hilt.android.compiler").get())
+        "kaptAndroidTest"(libs.findLibrary("hilt.android.compiler").get())
     }
 }
 

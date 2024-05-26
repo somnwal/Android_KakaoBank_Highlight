@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
-import com.somnwal.kakaobank.highlight.app.core.ui.icon.AppIcons
+import com.somnwal.kakaobank.app.core.designsystem.component.AppIcons
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
