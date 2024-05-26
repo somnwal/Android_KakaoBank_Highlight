@@ -17,6 +17,7 @@ import com.somnwal.kakaobank.app.core.designsystem.component.AppIcons
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KakaoSearchBar(
+    modifier: Modifier = Modifier,
     query: String = "",
     onQuery: () -> Unit,
     onQueryChange: (String) -> Unit,
@@ -30,7 +31,7 @@ fun KakaoSearchBar(
     }
 
     SearchBar(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(8.dp),

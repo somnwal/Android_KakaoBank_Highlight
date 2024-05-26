@@ -29,10 +29,6 @@ internal class MainNavigator(
     fun navigate(tab: MainTab) {
         // TODO 개념정리
         val navOptions = navOptions {
-            popUpTo(navController.graph.findStartDestination().id) {
-                saveState = true
-            }
-
             launchSingleTop = true
             restoreState = true
         }

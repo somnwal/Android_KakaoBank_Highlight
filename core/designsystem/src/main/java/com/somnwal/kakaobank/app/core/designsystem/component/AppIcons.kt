@@ -3,9 +3,11 @@ package com.somnwal.kakaobank.app.core.designsystem.component
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Image
+import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.OndemandVideo
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.VideoFile
@@ -20,5 +22,8 @@ class AppIcons {
 
         val ICON_IMAGE_OUTLINED = Icons.Outlined.Image
         val ICON_VIDEO_OUTLINED = Icons.Outlined.OndemandVideo
+
+        val ICON_LIGHT_THEME_OUTLINED = Icons.Outlined.LightMode
+        val ICON_DARK_THEME_OUTLINED = Icons.Outlined.DarkMode
     }
 }

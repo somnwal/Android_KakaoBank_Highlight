@@ -14,9 +14,11 @@ fun NavController.navigateSearch(navOptions: NavOptions) {
 fun NavGraphBuilder.homeNavGraph(
     padding: PaddingValues,
     onShowErrorSnackbar: (Throwable?) -> Unit,
+    isDarkTheme: Boolean,
+    onChangeTheme: (Boolean) -> Unit
 ) {
     composable(route = SearchRoute.ROUTE) {
-        SearchRoute(padding, onShowErrorSnackbar)
+        SearchRoute(padding, onShowErrorSnackbar, isDarkTheme, onChangeTheme)
     }
 }
 

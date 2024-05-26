@@ -24,9 +24,10 @@ class MainActivity : ComponentActivity() {
 
             val navigator: MainNavigator = rememberMainNavigator()
 
-            KakaoTheme {
+            KakaoTheme(darkTheme = isDarkTheme) {
                 MainScreen(
                     navigator = navigator,
+                    isDarkTheme = isDarkTheme,
                     onChangeTheme = { isDarkTheme ->
                         mainViewModel.updateIsDarkTheme(isDarkTheme)
                     }

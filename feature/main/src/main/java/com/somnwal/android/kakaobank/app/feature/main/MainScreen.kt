@@ -38,6 +38,7 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun MainScreen(
     navigator: MainNavigator,
+    isDarkTheme: Boolean,
     onChangeTheme: (isDarkTheme: Boolean) -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -65,7 +66,9 @@ internal fun MainScreen(
                 ) {
                     homeNavGraph(
                         padding = padding,
-                        onShowErrorSnackbar = onShowErrorSnackBar
+                        onShowErrorSnackbar = onShowErrorSnackBar,
+                        isDarkTheme = isDarkTheme,
+                        onChangeTheme = onChangeTheme,
                     )
                 }
             }

@@ -28,6 +28,7 @@ internal fun Project.configureComposeAndroid() {
             add("implementation", libs.findLibrary("androidx.compose.ui.graphics").get())
             add("implementation", libs.findLibrary("androidx.compose.material.iconsExtended").get())
 
+            add("implementation", libs.findLibrary("androidx.compose.ui.tooling").get())
             add("implementation", libs.findLibrary("androidx.compose.ui.tooling.preview").get())
             add("implementation", libs.findLibrary("androidx.compose.navigation").get())
             add("implementation", libs.findLibrary("androidx.compose.paging").get())
