@@ -1,7 +1,9 @@
 package com.somnwal.android.kakaobank.app.data.di
 
+import com.somnwal.android.kakaobank.app.data.repository.DefaultFavoriteRepository
 import com.somnwal.android.kakaobank.app.data.repository.DefaultSearchRepository
 import com.somnwal.android.kakaobank.app.data.repository.DefaultSettingsRepository
+import com.somnwal.kakaobank.app.core.data.repository.api.FavoriteRepository
 import com.somnwal.kakaobank.app.core.data.repository.api.SearchRepository
 import com.somnwal.kakaobank.app.core.data.repository.api.SettingsRepository
 import dagger.Binds
@@ -22,4 +24,9 @@ internal abstract class KakaoDataModule {
     abstract fun bindsSearchRepository(
         repository: DefaultSearchRepository
     ): SearchRepository
+
+    @Binds
+    abstract fun bindsFavoriteRepository(
+        repository: DefaultFavoriteRepository
+    ): FavoriteRepository
 }
