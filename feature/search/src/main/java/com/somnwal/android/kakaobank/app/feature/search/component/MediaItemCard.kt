@@ -47,12 +47,10 @@ import java.util.Date
 fun MediaItemCard(
     modifier: Modifier = Modifier,
     data: SearchData,
-    isExpanded: Boolean = false
+    isExpanded: Boolean = false,
+    onUpdateIsFavorite: (SearchData) -> Unit
 ) {
     val localDensity = LocalDensity.current
-
-    var dateFormatter = SimpleDateFormat("yyyy-MM-dd HH:mm")
-    var formattedDateText = dateFormatter.format(data.datetime)
 
     var imageUrl by remember { mutableStateOf(data.thumbnailUrl) }
     var imageLoading by remember { mutableStateOf(false) }
@@ -139,7 +137,7 @@ fun MediaItemCard(
                 Text(
                     modifier = Modifier
                         .wrapContentHeight(),
-                    text = formattedDateText
+                    text = data.datetime
                 )
             }
 
@@ -154,7 +152,7 @@ fun MediaItemCard(
                         .padding(6.dp)
                         .clickable(
                             onClick = {
-
+                                onUpdateIsFavorite(data)
                             }
                         ),
                     imageVector = if(data.isFavorite) {
@@ -188,9 +186,10 @@ fun MediaItemImageCardPreview() {
                     title = "이미지",
                     url = "https://avatars.githubusercontent.com/u/90139018?v=4",
                     thumbnailUrl = "https://avatars.githubusercontent.com/u/90139018?v=4",
-                    datetime = Date(),
+                    datetime = "2024-01-01",
                     isFavorite = false,
                 ),
+                onUpdateIsFavorite = { }
             )
         }
     }
@@ -214,9 +213,10 @@ fun MediaItemVideoCardPreview() {
                     title = "동영상",
                     url = "https://avatars.githubusercontent.com/u/90139018?v=4",
                     thumbnailUrl = "https://avatars.githubusercontent.com/u/90139018?v=4",
-                    datetime = Date(),
+                    datetime = "2024-01-01",
                     isFavorite = false,
                 ),
+                onUpdateIsFavorite = { }
             )
         }
     }

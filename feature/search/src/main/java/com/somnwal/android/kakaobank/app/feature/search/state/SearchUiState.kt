@@ -22,4 +22,9 @@ sealed interface SearchUiState {
         val isNextPageExist: Boolean,
         val data: ImmutableList<SearchData>
     ) : SearchUiState
+
+    @Immutable
+    data class Error(
+        val error: Throwable?
+    ) : SearchUiState
 }

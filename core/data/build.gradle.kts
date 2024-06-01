@@ -3,6 +3,7 @@ import com.somnwal.kakaobank.app.common.setNamespace
 plugins {
     id("somnwal.kakaobank.android.library")
     id("somnwal.kakaobank.android.hilt")
+    id("kotlinx-serialization")
 }
 
 android {
@@ -17,4 +18,6 @@ dependencies {
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.okhttp.logging.interceptor)
+
+    implementation(libs.kotlinx.serialization.json)
 }

@@ -63,6 +63,9 @@ internal fun SearchRoute(
         uiState = uiState,
         onQuery = { query, sort, page ->
             viewModel.search(query, sort, page)
+        },
+        onUpdateIsFavorite = { searchData ->
+            viewModel.updateIsFavorite(searchData)
         }
     )
 }
@@ -74,6 +77,7 @@ fun SearchScreen(
     onChangeTheme: (Boolean) -> Unit,
     uiState: SearchUiState,
     onQuery: (String, String, Int) -> Unit,
+    onUpdateIsFavorite: (SearchData) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
@@ -145,10 +149,12 @@ fun SearchScreen(
                         pageState += 1
 
                         onQuery(queryState, sortState, pageState)
-                    }
+                    },
+                    onUpdateIsFavorite = onUpdateIsFavorite
                 )
             }
             SearchUiState.Loading -> TODO()
+            is SearchUiState.Error -> TODO()
             SearchUiState.Empty -> TODO()
         }
     }
@@ -162,6 +168,7 @@ internal fun SearchResultContent(
     coroutineScope: CoroutineScope,
     onItemClick: (Int) -> Unit,
     onNextPage: () -> Unit,
+    onUpdateIsFavorite: (SearchData) -> Unit,
 ) {
     val FETCH_NEXT_COUNT = 25
 
@@ -181,7 +188,8 @@ internal fun SearchResultContent(
     ) {
         itemsIndexed(items = items) { index, item ->
             MediaItemCard(
-                data = item
+                data = item,
+                onUpdateIsFavorite = onUpdateIsFavorite
             )
         }
     }
@@ -202,6 +210,9 @@ fun SearchScreenPreview() {
                 data = immutableListOf()
             ),
             onQuery = { query, sort, page ->
+
+            },
+            onUpdateIsFavorite = {
 
             }
         )

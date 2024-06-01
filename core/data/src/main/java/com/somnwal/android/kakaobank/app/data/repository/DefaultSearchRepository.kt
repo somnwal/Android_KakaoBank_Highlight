@@ -1,6 +1,7 @@
 package com.somnwal.android.kakaobank.app.data.repository
 
 import android.annotation.SuppressLint
+import android.util.Log
 import com.somnwal.android.kakaobank.app.data.api.KakaoSearchApi
 import com.somnwal.android.kakaobank.app.data.model.search.SearchResult
 import com.somnwal.kakaobank.app.core.data.repository.api.SearchRepository
@@ -39,6 +40,8 @@ class DefaultSearchRepository @Inject constructor(
 
         val imageResultList = imageResult?.resultList ?: emptyList()
         val videoResultList = videoResult?.resultList ?: emptyList()
+
+        Log.d("TEST1234", "$imageResultList, $videoResultList")
 
         return SearchResult(
             isNextPageExist = (isNextImagePageExist || isNextVideoPageExist),
