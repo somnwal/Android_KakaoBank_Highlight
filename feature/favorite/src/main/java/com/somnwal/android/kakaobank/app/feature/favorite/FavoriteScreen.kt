@@ -1,45 +1,108 @@
 package com.somnwal.android.kakaobank.app.feature.favorite
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.somnwal.android.kakaobank.app.data.model.search.SearchData
+import com.somnwal.android.kakaobank.app.feature.favorite.component.FavoriteItemCard
+import com.somnwal.android.kakaobank.app.feature.favorite.navigation.FavoriteRoute
+import com.somnwal.android.kakaobank.app.feature.favorite.state.FavoriteUiState
+import kotlinx.collections.immutable.ImmutableList
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FavoriteScreen() {
+internal fun FavoriteRoute(
+    padding: PaddingValues,
+    onShowErrorSnackbar: (Throwable?) -> Unit,
+    viewModel: FavoriteViewModel = hiltViewModel()
+) {
+    val uistate by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(true) {
+
+    }
+
+    viewModel.getFavoriteList()
+
+    FavoriteScreen(
+        padding = padding,
+        uiState = uistate,
+        onUpdateIsFavorite = { searchData ->
+            viewModel.updateIsFavorite(searchData)
+        }
+    )
+}
+
+@Composable
+internal fun FavoriteScreen(
+    padding: PaddingValues,
+    uiState: FavoriteUiState,
+    onUpdateIsFavorite: (SearchData) -> Unit
+) {
+    val coroutineScope = rememberCoroutineScope()
+
     Column (
         modifier = Modifier
+            .padding(padding)
             .fillMaxSize(),
     ) {
-        SearchBar(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(8.dp),
-            query = "",
-            placeholder = {
-                Text(text = "검색!어를 입력해주세요.")
-            },
-            onQueryChange = {
+        when(uiState) {
+            FavoriteUiState.Idle -> {
 
-            },
-            onSearch = {
+            }
+            FavoriteUiState.Empty -> {
 
-            },
-            active = false,
-            onActiveChange = {},
-            content = {}
-        )
+            }
+            FavoriteUiState.Loading -> {
 
+            }
 
-        Text(text = "!1")
+            is FavoriteUiState.Success -> {
+                val data = uiState.data
+
+                FavoriteListContent(
+                    items = data,
+                    onUpdateIsFavorite = onUpdateIsFavorite
+                )
+            }
+            is FavoriteUiState.Error -> {
+
+            }
+        }
+    }
+}
+
+@Composable
+internal fun FavoriteListContent(
+    items: ImmutableList<SearchData>,
+    modifier: Modifier = Modifier,
+    onUpdateIsFavorite: (SearchData) -> Unit,
+) {
+    LazyColumn(
+        modifier = modifier
+            .fillMaxSize()
+    ) {
+        itemsIndexed(items = items) { index, item ->
+            FavoriteItemCard(
+                data = item,
+                onUpdateIsFavorite = onUpdateIsFavorite
+            )
+        }
     }
 }

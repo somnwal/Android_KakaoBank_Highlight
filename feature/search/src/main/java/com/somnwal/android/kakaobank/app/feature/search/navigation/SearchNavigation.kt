@@ -11,7 +11,7 @@ fun NavController.navigateSearch(navOptions: NavOptions) {
     navigate(SearchRoute.ROUTE)
 }
 
-fun NavGraphBuilder.homeNavGraph(
+fun NavGraphBuilder.searchNavGraph(
     padding: PaddingValues,
     onShowErrorSnackbar: (Throwable?) -> Unit,
     isDarkTheme: Boolean,

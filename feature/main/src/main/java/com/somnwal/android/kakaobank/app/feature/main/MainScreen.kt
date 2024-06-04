@@ -24,14 +24,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
+import com.somnwal.android.kakaobank.app.feature.favorite.navigation.favoriteNavGraph
 import com.somnwal.android.kakaobank.app.feature.main.ui.navigation.MainNavigator
 import com.somnwal.android.kakaobank.app.feature.main.ui.navigation.MainTab
-import com.somnwal.android.kakaobank.app.feature.search.navigation.homeNavGraph
+import com.somnwal.android.kakaobank.app.feature.search.navigation.searchNavGraph
 import com.somnwal.kakaobank.app.feature.main.R
 import kotlinx.coroutines.launch
 
@@ -64,11 +63,16 @@ internal fun MainScreen(
                     navController = navigator.navController,
                     startDestination = navigator.startDestination
                 ) {
-                    homeNavGraph(
+                    searchNavGraph(
                         padding = padding,
                         onShowErrorSnackbar = onShowErrorSnackBar,
                         isDarkTheme = isDarkTheme,
                         onChangeTheme = onChangeTheme,
+                    )
+
+                    favoriteNavGraph(
+                        padding = padding,
+                        onShowErrorSnackbar = onShowErrorSnackBar
                     )
                 }
             }

@@ -1,30 +1,27 @@
-package com.somnwal.android.kakaobank.app.feature.search.state
+package com.somnwal.android.kakaobank.app.feature.favorite.state
 
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Stable
 import com.somnwal.android.kakaobank.app.data.model.search.SearchData
 import kotlinx.collections.immutable.ImmutableList
 
-@Stable
-sealed interface SearchUiState {
+sealed interface FavoriteUiState {
 
     @Immutable
-    data object Idle: SearchUiState
+    data object Idle: FavoriteUiState
 
     @Immutable
-    data object Loading: SearchUiState
+    data object Loading: FavoriteUiState
 
     @Immutable
-    data object Empty: SearchUiState
+    data object Empty: FavoriteUiState
 
     @Immutable
     data class Success(
-        val isNextPageExist: Boolean,
         val data: ImmutableList<SearchData>
-    ) : SearchUiState
+    ) : FavoriteUiState
 
     @Immutable
     data class Error(
         val data: Throwable?
-    ) : SearchUiState
+    ) : FavoriteUiState
 }

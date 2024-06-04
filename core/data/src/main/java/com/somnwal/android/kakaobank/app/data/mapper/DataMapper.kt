@@ -20,7 +20,6 @@ fun KakaoSearchImageApiResponse.toData() =
                 url = item.imageUrl,
                 thumbnailUrl = item.thumbnailUrl,
                 datetime = SimpleDateFormat("yyyy-MM-dd HH:mm").format(item.datetime),
-                isFavorite = false
             )
         }
     )
@@ -36,7 +35,6 @@ fun KakaoSearchVideoApiResponse.toData() =
                 url = item.url,
                 thumbnailUrl = item.thumbnailUrl,
                 datetime = SimpleDateFormat("yyyy-MM-dd HH:mm").format(item.datetime),
-                isFavorite = false
             )
         }
     )

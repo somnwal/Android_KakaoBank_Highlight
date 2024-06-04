@@ -10,4 +10,9 @@ android {
 }
 
 dependencies {
+    implementation(libs.kotlinx.immutable)
+
+    implementation(libs.coil.kt)
+    implementation(libs.coil.kt.compose)
+    implementation(libs.coil.kt.svg)
 }

@@ -1,5 +1,6 @@
 package com.somnwal.android.kakaobank.app.data.repository
 
+import android.util.Log
 import com.google.gson.JsonNull
 import com.somnwal.android.kakaobank.app.core.datastore.datasource.FavoritePreferencesDataSource
 import com.somnwal.android.kakaobank.app.data.model.search.SearchData
@@ -8,7 +9,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -26,14 +29,14 @@ class DefaultFavoriteRepository @Inject constructor(
         }
 
     override suspend fun updateFavoriteList(data: SearchData, isFavorite: Boolean) {
-        val currentFavoriteList = _favoriteList.first()
+        val currentFavoriteList = _favoriteList.last()
 
         // 활성화 및 비활성화
         favoriteDataSource.updateFavoriteList(
             if(isFavorite) {
-                currentFavoriteList + data.toString()
+                currentFavoriteList + Json.encodeToString(SearchData.serializer(), data)
             } else {
-                currentFavoriteList - data.toString()
+                currentFavoriteList - Json.encodeToString(SearchData.serializer(), data)
             }
         )
     }

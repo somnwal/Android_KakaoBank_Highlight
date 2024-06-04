@@ -50,11 +50,7 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             getSearchResultWithFavoriteUseCase(query, sort, page)
                 .collectLatest { searchResult ->
-                    Log.d("TEST1234", "before = _searchResultList : $_searchResultList")
-
                     _searchResultList = _searchResultList + searchResult.resultList
-
-                    Log.d("TEST1234", "before = _searchResultList : $_searchResultList")
 
                     _uiState.value = SearchUiState.Success(
                         isNextPageExist = searchResult.isNextPageExist,
@@ -67,7 +63,6 @@ class SearchViewModel @Inject constructor(
     fun updateIsFavorite(searchData: SearchData) {
         viewModelScope.launch {
             searchData.isFavorite = !searchData.isFavorite
-
             updateIsFavoriteUseCase(searchData, searchData.isFavorite)
         }
     }

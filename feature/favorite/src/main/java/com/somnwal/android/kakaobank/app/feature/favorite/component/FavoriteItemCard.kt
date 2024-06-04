@@ -1,4 +1,4 @@
-package com.somnwal.android.kakaobank.app.feature.search.component
+package com.somnwal.android.kakaobank.app.feature.favorite.component
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
@@ -39,12 +39,10 @@ import com.somnwal.android.kakaobank.app.data.model.search.SearchData
 import com.somnwal.android.kakaobank.app.data.model.search.SearchDataType
 import com.somnwal.kakaobank.app.core.designsystem.component.AppIcons
 import com.somnwal.kakaobank.app.core.designsystem.theme.KakaoTheme
-import java.text.SimpleDateFormat
-import java.util.Date
 
 @SuppressLint("SimpleDateFormat", "RememberReturnType")
 @Composable
-fun MediaItemCard(
+fun FavoriteItemCard(
     modifier: Modifier = Modifier,
     data: SearchData,
     isExpanded: Boolean = false,
@@ -174,13 +172,13 @@ fun MediaItemCard(
     heightDp = 120
 )
 @Composable
-fun MediaItemImageCardPreview() {
+fun FavoriteItemImageCardPreview() {
     KakaoTheme() {
         Box(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            MediaItemCard(
+            FavoriteItemCard (
                 data = SearchData(
                     type = SearchDataType.IMAGE,
                     title = "이미지",
@@ -200,13 +198,13 @@ fun MediaItemImageCardPreview() {
     heightDp = 120
 )
 @Composable
-fun MediaItemVideoCardPreview() {
+fun FavoriteItemVideoCardPreview() {
     KakaoTheme() {
         Box(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            MediaItemCard(
+            FavoriteItemCard(
                 data = SearchData(
                     type = SearchDataType.VIDEO,
                     title = "동영상",
