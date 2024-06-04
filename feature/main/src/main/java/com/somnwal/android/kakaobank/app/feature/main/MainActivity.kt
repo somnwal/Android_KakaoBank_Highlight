@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.rememberNavController
 import com.somnwal.android.kakaobank.app.feature.main.ui.navigation.MainNavigator
 import com.somnwal.android.kakaobank.app.feature.main.ui.navigation.rememberMainNavigator
 import com.somnwal.kakaobank.app.core.designsystem.theme.KakaoTheme
@@ -17,7 +18,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         setContent {
             val isDarkTheme by mainViewModel.isDarkTheme.collectAsStateWithLifecycle(initialValue = false, this)

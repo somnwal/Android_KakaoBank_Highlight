@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import com.somnwal.android.kakaobank.app.feature.favorite.FavoriteRoute
 
 fun NavController.navigateFavorite(navOptions: NavOptions) {
-    navigate(FavoriteRoute.ROUTE)
+    navigate(FavoriteRoute.ROUTE, navOptions)
 }
 
 fun NavGraphBuilder.favoriteNavGraph(

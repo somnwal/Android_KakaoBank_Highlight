@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,13 +31,15 @@ import androidx.navigation.compose.NavHost
 import com.somnwal.android.kakaobank.app.feature.favorite.navigation.favoriteNavGraph
 import com.somnwal.android.kakaobank.app.feature.main.ui.navigation.MainNavigator
 import com.somnwal.android.kakaobank.app.feature.main.ui.navigation.MainTab
+import com.somnwal.android.kakaobank.app.feature.main.ui.navigation.rememberMainNavigator
 import com.somnwal.android.kakaobank.app.feature.search.navigation.searchNavGraph
 import com.somnwal.kakaobank.app.feature.main.R
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 
 @Composable
 internal fun MainScreen(
-    navigator: MainNavigator,
+    navigator: MainNavigator = rememberMainNavigator(),
     isDarkTheme: Boolean,
     onChangeTheme: (isDarkTheme: Boolean) -> Unit
 ) {
@@ -46,9 +49,11 @@ internal fun MainScreen(
     val localContextResource = LocalContext.current.resources
     val onShowErrorSnackBar: (error: Throwable?) -> Unit = { error ->
         coroutineScope.launch {
-            when(error) {
-                else -> localContextResource.getString(R.string.error_message_unknown)
-            }
+            snackbarHostState.showSnackbar(
+                when(error) {
+                    else -> localContextResource.getString(R.string.error_message_unknown)
+                }
+            )
         }
     }
 
@@ -79,18 +84,17 @@ internal fun MainScreen(
         },
         bottomBar = {
             MainBottomBar(
-                visible = navigator.shouldShowBottomBar(),
-                tabs = MainTab.entries.toList(),
+                tabs = MainTab.entries.toPersistentList(),
                 currentTab = navigator.currentTab,
                 onTabSelected = { navigator.navigate(it) }
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     )
 }
 
 @Composable
 private fun MainBottomBar(
-    visible: Boolean,
     tabs: List<MainTab>,
     currentTab: MainTab?,
     onTabSelected: (MainTab) -> Unit,

@@ -41,6 +41,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.immutableListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun SearchRoute(
@@ -61,8 +62,17 @@ internal fun SearchRoute(
         isDarkTheme = isDarkTheme,
         onChangeTheme = onChangeTheme,
         uiState = uiState,
-        onQuery = { query, sort, page ->
-            viewModel.search(query, sort, page)
+        onQuery = { query ->
+            viewModel.search(
+                query = query,
+                page = 1
+            )
+        },
+        onNextPage = { query, page ->
+            viewModel.search(
+                query = query,
+                page = page
+            )
         },
         onUpdateIsFavorite = { searchData ->
             viewModel.updateIsFavorite(searchData)
@@ -76,7 +86,8 @@ fun SearchScreen(
     isDarkTheme: Boolean,
     onChangeTheme: (Boolean) -> Unit,
     uiState: SearchUiState,
-    onQuery: (String, String, Int) -> Unit,
+    onQuery: (String) -> Unit,
+    onNextPage: (String, Int) -> Unit,
     onUpdateIsFavorite: (SearchData) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -88,7 +99,6 @@ fun SearchScreen(
             .padding(padding),
     ) {
         var queryState by rememberSaveable { mutableStateOf("고양이") }
-        var sortState by rememberSaveable { mutableStateOf("recency") }
         var pageState by rememberSaveable { mutableIntStateOf(1) }
 
         Row(
@@ -121,7 +131,7 @@ fun SearchScreen(
                     .padding(start = 8.dp),
                 query = queryState,
                 onQuery = {
-                    onQuery(queryState, sortState, pageState)
+                    onQuery(queryState)
                 },
                 onQueryChange = { changedQuery ->
                     queryState = changedQuery
@@ -148,7 +158,7 @@ fun SearchScreen(
                         Log.d("SearchScreen", "다음 페이지 호출 >>")
                         pageState += 1
 
-                        onQuery(queryState, sortState, pageState)
+                        onNextPage(queryState, pageState)
                     },
                     onUpdateIsFavorite = onUpdateIsFavorite
                 )
@@ -170,11 +180,11 @@ internal fun SearchResultContent(
     onNextPage: () -> Unit,
     onUpdateIsFavorite: (SearchData) -> Unit,
 ) {
-    val FETCH_NEXT_COUNT = 25
+    val FETCH_NEXT_COUNT = 1
 
     LaunchedEffect(listState) {
         snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull() }
-            .collect { lastVisibleItem ->
+            .collectLatest { lastVisibleItem ->
                 if(lastVisibleItem != null && lastVisibleItem.index >= listState.layoutInfo.totalItemsCount - FETCH_NEXT_COUNT) {
                     onNextPage()
                 }
@@ -184,7 +194,7 @@ internal fun SearchResultContent(
     LazyColumn(
         modifier = modifier
             .fillMaxSize(),
-        state = listState
+        state = listState,
     ) {
         itemsIndexed(items = items) { index, item ->
             MediaItemCard(
@@ -209,7 +219,10 @@ fun SearchScreenPreview() {
                 isNextPageExist = false,
                 data = immutableListOf()
             ),
-            onQuery = { query, sort, page ->
+            onQuery = { query ->
+
+            },
+            onNextPage = { query, page ->
 
             },
             onUpdateIsFavorite = {

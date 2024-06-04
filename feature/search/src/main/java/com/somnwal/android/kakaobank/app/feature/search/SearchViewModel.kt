@@ -35,8 +35,6 @@ class SearchViewModel @Inject constructor(
     private val updateIsFavoriteUseCase: UpdateIsFavoriteUseCase
 ) : ViewModel() {
 
-    private var _searchResultList : List<SearchData> = listOf()
-
     private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Idle)
     val uiState: StateFlow<SearchUiState>
         get() = _uiState.asStateFlow()
@@ -46,15 +44,17 @@ class SearchViewModel @Inject constructor(
     val errorFlow
         get() = _errorFlow.asSharedFlow()
 
-    fun search(query: String, sort: String, page: Int) {
+    fun search(
+        query: String,
+        sort: String = "recency",
+        page: Int
+    ) {
         viewModelScope.launch {
             getSearchResultWithFavoriteUseCase(query, sort, page)
                 .collectLatest { searchResult ->
-                    _searchResultList = _searchResultList + searchResult.resultList
-
                     _uiState.value = SearchUiState.Success(
                         isNextPageExist = searchResult.isNextPageExist,
-                        data = _searchResultList.toPersistentList()
+                        data = searchResult.resultList.toPersistentList()
                     )
                 }
         }

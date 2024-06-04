@@ -13,7 +13,11 @@ class GetSearchResultWithFavoriteUseCase @Inject constructor(
     private val getFavoriteListUseCase: GetFavoriteListUseCase,
 ) {
 
-    suspend operator fun invoke(query: String, sort: String, page: Int): Flow<SearchResult> =
+    suspend operator fun invoke(
+        query: String,
+        sort: String,
+        page: Int
+    ): Flow<SearchResult> =
         combine(
             getSearchResultUseCase(query, sort, page),
             getFavoriteListUseCase()

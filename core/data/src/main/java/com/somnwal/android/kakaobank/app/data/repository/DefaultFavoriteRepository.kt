@@ -25,11 +25,13 @@ class DefaultFavoriteRepository @Inject constructor(
         _favoriteList.map { favoriteSet ->
             favoriteSet.toList().map { dataString ->
                 Json.decodeFromString<SearchData>(dataString)
+            }.sortedByDescending {
+                it.datetime
             }
         }
 
     override suspend fun updateFavoriteList(data: SearchData, isFavorite: Boolean) {
-        val currentFavoriteList = _favoriteList.last()
+        val currentFavoriteList = _favoriteList.first()
 
         // 활성화 및 비활성화
         favoriteDataSource.updateFavoriteList(

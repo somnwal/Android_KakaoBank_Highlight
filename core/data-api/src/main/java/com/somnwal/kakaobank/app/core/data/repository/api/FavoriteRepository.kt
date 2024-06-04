@@ -7,5 +7,8 @@ interface FavoriteRepository {
 
     fun getFavoriteList() : Flow<List<SearchData>>
 
-    suspend fun updateFavoriteList(data: SearchData, isFavorite: Boolean)
+    suspend fun updateFavoriteList(
+        data: SearchData,
+        isFavorite: Boolean
+    )
 }

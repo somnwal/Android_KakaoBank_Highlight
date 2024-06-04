@@ -10,6 +10,10 @@ import javax.inject.Inject
 class GetSearchResultUseCase @Inject constructor(
     private val searchRepository: SearchRepository
 ) {
-    suspend operator fun invoke(query: String, sort: String, page: Int): Flow<SearchResult> =
+    suspend operator fun invoke(
+        query: String,
+        sort: String,
+        page: Int
+    ): Flow<SearchResult> =
         searchRepository.getSearchResult(query, sort, page)
 }

@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import com.somnwal.android.kakaobank.app.feature.search.SearchRoute
 
 fun NavController.navigateSearch(navOptions: NavOptions) {
-    navigate(SearchRoute.ROUTE)
+    navigate(SearchRoute.ROUTE, navOptions)
 }
 
 fun NavGraphBuilder.searchNavGraph(

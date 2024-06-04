@@ -18,7 +18,7 @@ dependencyResolutionManagement {
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-rootProject.name = "kakao"
+rootProject.name = "kakaobank"
 include(":app")
 
 include(

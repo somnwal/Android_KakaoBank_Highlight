@@ -2,7 +2,6 @@ package com.somnwal.android.kakaobank.app.feature.main.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -30,6 +29,11 @@ internal class MainNavigator(
     fun navigate(tab: MainTab) {
         // TODO 개념정리
         val navOptions = navOptions {
+            // 시작화면 까지 스택을 전부 팝업한다.
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+
             launchSingleTop = true
             restoreState = true
         }
