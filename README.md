@@ -32,38 +32,23 @@
 
 ### 프로젝트 구조
 
-|       모듈명       |           설명           |
-|:-----------------|:------------------------|
-| :app             | 앱                      |
-| :core            | 공통/핵심 모듈             |
-| :core:ui         |  UI 컴포넌트, 테마 등 관리   |
-| :data            | 데이터 관리 모듈            |
-| :data:model      | 데이터 모델 정의            |
-| :data:api        | Api 호출 관리             |
-| :data:repository | 데이터 Repository 관리     |
-| :feature         | 실질적인 화면 구현          |
-| :feature:search  | 검색 화면 구현             |
-| :feature:favorite| 보관함 화면 구현            |
+|        모듈명        |                     설명                    |
+|:-------------------|:-------------------------------------------|
+| :app               | 앱                                         |
+| :core              | 공통/핵심 모듈                                |
+| :core:data         | API, Repository 등 데이터 관리 모듈            |
+| :core:data-api     | Repository 추상 인터페이스 정의                 |
+| :core:datastore    | 기기 내 저장하는 데이터 관리                     |
+| :core:model        | 데이터 모델 정의                              |
+| :core:designsystem | 앱 테마, 아이콘, 공통 컴포넌트 등 UI 요소 구현      |
+| :core:domain       | UseCase 정의                               |
+| :feature           | 실질적인 화면 구현                             |
+| :feature:main      | 앱 공통 화면 구현                              |
+| :feature:search    | 검색 화면 구현                                |
+| :feature:favorite  | 보관함 화면 구현                               |
 
-<br/><br/><br/>
 
-```mermaid
-stateDiagram
-
-project --> app
-project --> core
-project --> data
-project --> feature
-
-core --> ui
-
-data --> api
-data --> model
-data --> repository
-
-feature --> search
-feature --> favorite
-```
+![멀티모듈 프로젝트 구조](https://github.com/somnwal/Android_KakaoBank_Highlight/blob/main/project.png?raw=true)
 
 <br/><br/>
 
