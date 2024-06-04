@@ -15,3 +15,7 @@ plugins {
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.kotlin.serialization) apply false
 }
+
+apply {
+    from("gradle/dependencyGraph.gradle")
+}
