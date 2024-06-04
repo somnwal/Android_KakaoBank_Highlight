@@ -1,14 +1,13 @@
-// from: https://github.com/DroidKaigi/conference-app-2021/blob/main/gradle/dependencyGraph.gradle
-// from: https://github.com/JakeWharton/SdkSearch/blob/3351cad9bfacb0a364858e843774147143f58c7a/gradle/projectDependencyGraph.gradle
 tasks.register('projectDependencyGraph') {
     doLast {
-        def dotFileName = 'project.dot'
+        def dotFileName = 'project'
+        def graphTitle = 'Project Module Dependency Graph'
         def dot = new File(rootProject.rootDir, dotFileName)
         dot.parentFile.mkdirs()
         dot.delete()
 
         dot << 'digraph {\n'
-        dot << "  graph [label=\"${rootProject.name}\\n \",labelloc=t,fontsize=30,ranksep=1.4];\n"
+        dot << "  graph [label=\"${graphTitle}\\n \",labelloc=t,fontsize=30,ranksep=1.4];\n"
         dot << '  node [style=filled, fillcolor="#bbbbbb"];\n'
         dot << '  rankdir=TB;\n'
 
