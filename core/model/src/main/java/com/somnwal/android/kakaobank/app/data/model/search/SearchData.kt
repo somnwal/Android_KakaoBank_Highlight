@@ -1,6 +1,8 @@
 package com.somnwal.android.kakaobank.app.data.model.search
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Serializer
+import kotlinx.serialization.Transient
 import java.util.Date
 
 @Serializable

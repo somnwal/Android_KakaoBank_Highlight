@@ -47,8 +47,7 @@ class FavoriteViewModel @Inject constructor(
 
     fun updateIsFavorite(searchData: SearchData) {
         viewModelScope.launch {
-            searchData.isFavorite = !searchData.isFavorite
-            updateIsFavoriteUseCase(searchData, searchData.isFavorite)
+            updateIsFavoriteUseCase(searchData, !searchData.isFavorite)
         }
     }
 }

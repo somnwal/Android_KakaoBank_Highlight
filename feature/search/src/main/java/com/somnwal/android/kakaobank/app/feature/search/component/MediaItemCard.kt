@@ -53,8 +53,9 @@ fun MediaItemCard(
     val localDensity = LocalDensity.current
 
     var imageUrl by remember { mutableStateOf(data.thumbnailUrl) }
-    var isFavorite by remember { mutableStateOf(data.isFavorite) }
     var imageDisplayRatio by rememberSaveable { mutableFloatStateOf(0.3f) }
+
+    var isFavorite by remember { mutableStateOf(data.isFavorite) }
 
     LaunchedEffect(isExpanded) {
         if (isExpanded) {
@@ -64,10 +65,6 @@ fun MediaItemCard(
             imageDisplayRatio = 0.3f
             imageUrl = data.thumbnailUrl
         }
-    }
-
-    LaunchedEffect(data.isFavorite) {
-        isFavorite = data.isFavorite
     }
 
     Card(
@@ -155,6 +152,7 @@ fun MediaItemCard(
                         .padding(6.dp)
                         .clickable(
                             onClick = {
+                                isFavorite = !isFavorite
                                 onUpdateIsFavorite(data)
                             }
                         ),

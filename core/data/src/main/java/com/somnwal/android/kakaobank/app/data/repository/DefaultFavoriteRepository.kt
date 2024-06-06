@@ -36,7 +36,9 @@ class DefaultFavoriteRepository @Inject constructor(
         // 활성화 및 비활성화
         favoriteDataSource.updateFavoriteList(
             if(isFavorite) {
-                currentFavoriteList + Json.encodeToString(SearchData.serializer(), data)
+                currentFavoriteList + Json.encodeToString(SearchData.serializer(), data.apply {
+                    this.isFavorite = true
+                })
             } else {
                 currentFavoriteList - Json.encodeToString(SearchData.serializer(), data)
             }
