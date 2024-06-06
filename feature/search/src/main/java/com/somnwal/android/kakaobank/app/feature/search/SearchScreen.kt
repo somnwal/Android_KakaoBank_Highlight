@@ -2,6 +2,8 @@ package com.somnwal.android.kakaobank.app.feature.search
 
 import android.util.Log
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -13,8 +15,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,6 +29,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -36,12 +39,11 @@ import com.somnwal.android.kakaobank.app.feature.search.component.KakaoSearchBar
 import com.somnwal.android.kakaobank.app.feature.search.component.MediaItemCard
 import com.somnwal.android.kakaobank.app.feature.search.state.SearchUiState
 import com.somnwal.kakaobank.app.core.designsystem.component.AppIcons
-import com.somnwal.kakaobank.app.core.designsystem.theme.KakaoTheme
+import com.somnwal.kakaobank.app.core.designsystem.component.LoadingBar
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.immutableListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun SearchRoute(
@@ -139,39 +141,60 @@ fun SearchScreen(
             )
         }
 
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            when(uiState) {
+                SearchUiState.Idle -> {
 
-        when(uiState) {
-            SearchUiState.Idle -> {
+                }
+                is SearchUiState.Loading,
+                is SearchUiState.Success -> {
+                    val data = if(uiState is SearchUiState.Success) {
+                        uiState.data
+                    } else {
+                        listOf<SearchData>().toPersistentList()
+                    }
 
+                    SearchScreenSuccessContent(
+                        items = data,
+                        listState = listState,
+                        coroutineScope = coroutineScope,
+                        onItemClick = {
+
+                        },
+                        onNextPage = {
+                            Log.d("SearchScreen", "다음 페이지 호출 >>")
+                            pageState += 1
+
+                            onNextPage(queryState, pageState)
+                        },
+                        onUpdateIsFavorite = onUpdateIsFavorite
+                    )
+
+                    LoadingBar(
+                        isLoading = uiState is SearchUiState.Loading
+                    )
+                }
+                // 비어있을 때와 에러가 발생했을 때
+                SearchUiState.Empty,
+                is SearchUiState.Error -> {
+                    SearchScreenFailContent(
+                        uiState = uiState
+                    )
+                }
+
+                else -> {
+
+                }
             }
-            is SearchUiState.Success -> {
-                val data = uiState.data
-
-                SearchResultContent(
-                    items = data,
-                    listState = listState,
-                    coroutineScope = coroutineScope,
-                    onItemClick = {
-
-                    },
-                    onNextPage = {
-                        Log.d("SearchScreen", "다음 페이지 호출 >>")
-                        pageState += 1
-
-                        onNextPage(queryState, pageState)
-                    },
-                    onUpdateIsFavorite = onUpdateIsFavorite
-                )
-            }
-            SearchUiState.Loading -> TODO()
-            is SearchUiState.Error -> TODO()
-            SearchUiState.Empty -> TODO()
         }
     }
 }
 
 @Composable
-internal fun SearchResultContent(
+internal fun SearchScreenSuccessContent(
     items: ImmutableList<SearchData>,
     modifier: Modifier = Modifier,
     listState: LazyListState,
@@ -205,30 +228,41 @@ internal fun SearchResultContent(
     }
 }
 
+@Composable
+internal fun SearchScreenFailContent(
+    modifier: Modifier = Modifier,
+    uiState: SearchUiState
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            modifier = Modifier,
+            textAlign = TextAlign.Center,
+            text = when(uiState) {
+                SearchUiState.Empty -> {
+                    "조회결과가 존재하지 않습니다."
+                }
+                is SearchUiState.Error -> {
+                    "조회 중 오류가 발생했습니다."
+                }
+                else -> {
+                    ""
+                }
+            }
+        )
+    }
+}
+
 @Preview(
     showBackground = true
 )
 @Composable
-fun SearchScreenPreview() {
-    KakaoTheme {
-        SearchScreen(
-            padding = PaddingValues(0.dp),
-            isDarkTheme = false,
-            onChangeTheme = { },
-            uiState = SearchUiState.Success(
-                isNextPageExist = false,
-                data = immutableListOf()
-            ),
-            onQuery = { query ->
-
-            },
-            onNextPage = { query, page ->
-
-            },
-            onUpdateIsFavorite = {
-
-            }
-        )
-    }
-
+internal fun SearchScreenFailContentPreivew() {
+    SearchScreenFailContent(
+        uiState = SearchUiState.Empty
+    )
 }

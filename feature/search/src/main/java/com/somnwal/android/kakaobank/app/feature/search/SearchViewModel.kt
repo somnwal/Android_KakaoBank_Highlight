@@ -50,6 +50,14 @@ class SearchViewModel @Inject constructor(
         page: Int
     ) {
         viewModelScope.launch {
+            _uiState.value = SearchUiState.Loading(
+                if(_uiState.value is SearchUiState.Success) {
+                    (_uiState.value as SearchUiState.Success).data
+                } else {
+                    listOf<SearchData>().toPersistentList()
+                }
+            )
+
             getSearchResultWithFavoriteUseCase(query, sort, page)
                 .collectLatest { searchResult ->
                     _uiState.value = SearchUiState.Success(
