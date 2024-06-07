@@ -41,9 +41,9 @@ import com.somnwal.android.kakaobank.app.feature.search.state.SearchUiState
 import com.somnwal.kakaobank.app.core.designsystem.component.AppIcons
 import com.somnwal.kakaobank.app.core.designsystem.component.LoadingBar
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun SearchRoute(
@@ -54,9 +54,10 @@ internal fun SearchRoute(
     viewModel: SearchViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val loading by viewModel.loading.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
-        viewModel.errorFlow.collectLatest { error -> onShowErrorSnackBar(error) }
+        viewModel.error.collectLatest { error -> onShowErrorSnackBar(error) }
     }
 
     SearchScreen(
@@ -64,6 +65,7 @@ internal fun SearchRoute(
         isDarkTheme = isDarkTheme,
         onChangeTheme = onChangeTheme,
         uiState = uiState,
+        loading = loading,
         onQuery = { query ->
             viewModel.search(
                 query = query,
@@ -88,6 +90,7 @@ fun SearchScreen(
     isDarkTheme: Boolean,
     onChangeTheme: (Boolean) -> Unit,
     uiState: SearchUiState,
+    loading: Boolean,
     onQuery: (String) -> Unit,
     onNextPage: (String, Int) -> Unit,
     onUpdateIsFavorite: (SearchData) -> Unit,
@@ -149,33 +152,31 @@ fun SearchScreen(
                 SearchUiState.Idle -> {
 
                 }
-                is SearchUiState.Loading,
                 is SearchUiState.Success -> {
-                    val data = if(uiState is SearchUiState.Success) {
-                        uiState.data
-                    } else {
-                        listOf<SearchData>().toPersistentList()
+                    val data = uiState.data
+
+                    LaunchedEffect(listState) {
+                        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull() }
+                            .collectLatest { lastVisibleItem ->
+                                if(lastVisibleItem != null && !loading && lastVisibleItem.index >= listState.layoutInfo.totalItemsCount - 1) {
+                                    coroutineScope.launch {
+                                        pageState += 1
+                                        onNextPage(queryState, pageState)
+                                    }
+                                }
+                            }
                     }
 
                     SearchScreenSuccessContent(
                         items = data,
                         listState = listState,
-                        coroutineScope = coroutineScope,
                         onItemClick = {
-
-                        },
-                        onNextPage = {
-                            Log.d("SearchScreen", "다음 페이지 호출 >>")
-                            pageState += 1
-
-                            onNextPage(queryState, pageState)
+                            // TODO (열기)
                         },
                         onUpdateIsFavorite = onUpdateIsFavorite
                     )
 
-                    LoadingBar(
-                        isLoading = uiState is SearchUiState.Loading
-                    )
+                    LoadingBar(isLoading = loading)
                 }
                 // 비어있을 때와 에러가 발생했을 때
                 SearchUiState.Empty,
@@ -198,22 +199,9 @@ internal fun SearchScreenSuccessContent(
     items: ImmutableList<SearchData>,
     modifier: Modifier = Modifier,
     listState: LazyListState,
-    coroutineScope: CoroutineScope,
     onItemClick: (Int) -> Unit,
-    onNextPage: () -> Unit,
     onUpdateIsFavorite: (SearchData) -> Unit,
 ) {
-    val FETCH_NEXT_COUNT = 1
-
-    LaunchedEffect(listState) {
-        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull() }
-            .collectLatest { lastVisibleItem ->
-                if(lastVisibleItem != null && lastVisibleItem.index >= listState.layoutInfo.totalItemsCount - FETCH_NEXT_COUNT) {
-                    onNextPage()
-                }
-            }
-    }
-
     LazyColumn(
         modifier = modifier
             .fillMaxSize(),

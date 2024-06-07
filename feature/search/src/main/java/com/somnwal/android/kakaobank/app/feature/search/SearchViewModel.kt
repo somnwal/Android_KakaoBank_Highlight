@@ -14,6 +14,7 @@ import com.somnwal.android.kakaobank.app.feature.search.state.SearchUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -39,10 +40,15 @@ class SearchViewModel @Inject constructor(
     val uiState: StateFlow<SearchUiState>
         get() = _uiState.asStateFlow()
 
-    private val _errorFlow = MutableSharedFlow<Throwable>()
+    private val _error = MutableSharedFlow<Throwable>()
 
-    val errorFlow
-        get() = _errorFlow.asSharedFlow()
+    val error
+        get() = _error.asSharedFlow()
+
+    private val _loading = MutableStateFlow(false)
+
+    val loading
+        get() = _loading.asStateFlow()
 
     fun search(
         query: String,
@@ -50,13 +56,7 @@ class SearchViewModel @Inject constructor(
         page: Int
     ) {
         viewModelScope.launch {
-            _uiState.value = SearchUiState.Loading(
-                if(_uiState.value is SearchUiState.Success) {
-                    (_uiState.value as SearchUiState.Success).data
-                } else {
-                    listOf<SearchData>().toPersistentList()
-                }
-            )
+            _loading.value = true
 
             getSearchResultWithFavoriteUseCase(query, sort, page)
                 .collectLatest { searchResult ->
@@ -64,6 +64,8 @@ class SearchViewModel @Inject constructor(
                         isNextPageExist = searchResult.isNextPageExist,
                         data = searchResult.resultList.toPersistentList()
                     )
+
+                    _loading.value = false
                 }
         }
     }

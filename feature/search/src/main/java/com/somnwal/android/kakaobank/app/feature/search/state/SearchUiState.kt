@@ -12,11 +12,6 @@ sealed interface SearchUiState {
     data object Idle: SearchUiState
 
     @Immutable
-    data class Loading(
-        val data: ImmutableList<SearchData>
-    ) : SearchUiState
-
-    @Immutable
     data object Empty: SearchUiState
 
     @Immutable
