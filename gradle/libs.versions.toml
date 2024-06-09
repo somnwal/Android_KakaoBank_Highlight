@@ -35,7 +35,7 @@ kotlinxImmutable = "0.3.7"
 kotlinxSerializationJson = "1.6.3"
 
 # Coroutines
-coroutines = "1.8.1"
+coroutines = "1.8.0"
 
 # DataStore
 androidxDatastore = "1.1.1"

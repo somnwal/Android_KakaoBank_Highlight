@@ -2,6 +2,7 @@ package com.somnwal.android.kakaobank.app.feature.search
 
 import android.util.Log
 import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
@@ -24,50 +25,64 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val SEARCH_QUERY = "searchQuery"
+private const val SEARCH_PAGE = "searchPage"
+
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val getSearchResultWithFavoriteUseCase: GetSearchResultWithFavoriteUseCase,
-    private val updateIsFavoriteUseCase: UpdateIsFavoriteUseCase
+    private val updateIsFavoriteUseCase: UpdateIsFavoriteUseCase,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Idle)
-    val uiState: StateFlow<SearchUiState>
-        get() = _uiState.asStateFlow()
+    var searchQuery = savedStateHandle.getStateFlow(
+        key = SEARCH_QUERY,
+        initialValue = ""
+    )
 
-    private val _error = MutableSharedFlow<Throwable>()
+    val searchPage = savedStateHandle.getStateFlow(
+        key = SEARCH_PAGE,
+        initialValue = 1
+    )
 
-    val error
-        get() = _error.asSharedFlow()
-
-    private val _loading = MutableStateFlow(false)
-
-    val loading
-        get() = _loading.asStateFlow()
-
-    fun search(
-        query: String,
-        sort: String = "recency",
-        page: Int
-    ) {
-        viewModelScope.launch {
-            _loading.value = true
-
-            getSearchResultWithFavoriteUseCase(query, sort, page)
-                .collectLatest { searchResult ->
-                    _uiState.value = SearchUiState.Success(
-                        isNextPageExist = searchResult.isNextPageExist,
-                        data = searchResult.resultList.toPersistentList()
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val uiState : StateFlow<SearchUiState> =
+        searchQuery.flatMapLatest { query ->
+            searchPage.flatMapLatest { page ->
+                getSearchResultWithFavoriteUseCase(
+                    query = query,
+                    page = page,
+                    sort = "recency"
+                ).map<SearchResult, SearchUiState> { data ->
+                    SearchUiState.Success(
+                        data = data.resultList
                     )
-
-                    _loading.value = false
+                }.catch { error ->
+                    emit(SearchUiState.Error(error))
                 }
-        }
+            }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = SearchUiState.Idle
+        )
+
+    fun onSearch(query: String) {
+        savedStateHandle[SEARCH_QUERY] = query
+        savedStateHandle[SEARCH_PAGE] = 1
+
+
+    }
+
+    fun onNextPage() {
+        savedStateHandle[SEARCH_PAGE] = searchPage.value + 1
     }
 
     fun updateIsFavorite(searchData: SearchData) {

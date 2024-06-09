@@ -28,9 +28,7 @@ class MainActivity : ComponentActivity() {
                 MainScreen(
                     navigator = navigator,
                     isDarkTheme = isDarkTheme,
-                    onChangeTheme = { isDarkTheme ->
-                        mainViewModel.updateIsDarkTheme(isDarkTheme)
-                    }
+                    onChangeTheme = mainViewModel::updateIsDarkTheme
                 )
             }
         }

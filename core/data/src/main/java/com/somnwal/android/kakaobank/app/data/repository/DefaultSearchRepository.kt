@@ -14,15 +14,20 @@ import javax.inject.Inject
 class DefaultSearchRepository @Inject constructor(
     private val searchApi: KakaoSearchApi
 ) : SearchRepository {
+
+    private var savedSearchDataList = listOf<SearchData>()
+
     private var isNextImagePageExist = false
     private var isNextVideoPageExist = false
 
-    @SuppressLint("CheckResult")
     override suspend fun getSearchResult(
         query: String,
         sort: String,
         page: Int
     ) : Flow<SearchResult> = flow {
+
+        if(page == 1) savedSearchDataList = listOf()
+
         emit(
             getMergedSearchResult(
                 if(page == 1 || isNextImagePageExist) searchApi.searchImage(query, sort, page).body()?.toData() else null,
@@ -43,7 +48,7 @@ class DefaultSearchRepository @Inject constructor(
 
         return SearchResult(
             isNextPageExist = (isNextImagePageExist || isNextVideoPageExist),
-            resultList = (imageResultList + videoResultList).sortedByDescending {
+            resultList = (savedSearchDataList + imageResultList + videoResultList).sortedByDescending {
                 it.datetime
             }
         )

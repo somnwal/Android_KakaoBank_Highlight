@@ -1,6 +1,5 @@
 package com.somnwal.android.kakaobank.app.feature.search
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,18 +18,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -40,10 +38,7 @@ import com.somnwal.android.kakaobank.app.feature.search.component.MediaItemCard
 import com.somnwal.android.kakaobank.app.feature.search.state.SearchUiState
 import com.somnwal.kakaobank.app.core.designsystem.component.AppIcons
 import com.somnwal.kakaobank.app.core.designsystem.component.LoadingBar
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun SearchRoute(
@@ -54,10 +49,16 @@ internal fun SearchRoute(
     viewModel: SearchViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val loading by viewModel.loading.collectAsStateWithLifecycle()
+
+    val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
+    val searchPage by viewModel.searchPage.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
-        viewModel.error.collectLatest { error -> onShowErrorSnackBar(error) }
+        viewModel.uiState.collectLatest { state ->
+            if (state is SearchUiState.Error) {
+                onShowErrorSnackBar(state.data)
+            }
+        }
     }
 
     SearchScreen(
@@ -65,22 +66,9 @@ internal fun SearchRoute(
         isDarkTheme = isDarkTheme,
         onChangeTheme = onChangeTheme,
         uiState = uiState,
-        loading = loading,
-        onQuery = { query ->
-            viewModel.search(
-                query = query,
-                page = 1
-            )
-        },
-        onNextPage = { query, page ->
-            viewModel.search(
-                query = query,
-                page = page
-            )
-        },
-        onUpdateIsFavorite = { searchData ->
-            viewModel.updateIsFavorite(searchData)
-        }
+        onSearch = viewModel::onSearch,
+        onNextPage = viewModel::onNextPage,
+        onUpdateIsFavorite = viewModel::updateIsFavorite
     )
 }
 
@@ -90,27 +78,25 @@ fun SearchScreen(
     isDarkTheme: Boolean,
     onChangeTheme: (Boolean) -> Unit,
     uiState: SearchUiState,
-    loading: Boolean,
-    onQuery: (String) -> Unit,
-    onNextPage: (String, Int) -> Unit,
+    onSearch: (String) -> Unit,
+    onNextPage: () -> Unit,
     onUpdateIsFavorite: (SearchData) -> Unit,
 ) {
-    val coroutineScope = rememberCoroutineScope()
-    val listState = rememberLazyListState()
-
     Column (
         modifier = Modifier
             .fillMaxSize()
             .padding(padding),
     ) {
+
         var queryState by rememberSaveable { mutableStateOf("고양이") }
-        var pageState by rememberSaveable { mutableIntStateOf(1) }
+        var listState = rememberLazyListState()
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp)
         ) {
+            // 다크모드 | 라이트모드 아이콘
             val icon = if(isDarkTheme) {
                 AppIcons.ICON_DARK_THEME_OUTLINED
             } else {
@@ -135,11 +121,11 @@ fun SearchScreen(
                 modifier = Modifier
                     .padding(start = 8.dp),
                 query = queryState,
-                onQuery = {
-                    onQuery(queryState)
+                onQueryChange = { query ->
+                    queryState = query
                 },
-                onQueryChange = { changedQuery ->
-                    queryState = changedQuery
+                onSearch = {
+                    onSearch(queryState)
                 }
             )
         }
@@ -149,39 +135,28 @@ fun SearchScreen(
                 .fillMaxSize()
         ) {
             when(uiState) {
-                SearchUiState.Idle -> {
-
+                SearchUiState.Loading -> {
+                    LoadingBar()
                 }
                 is SearchUiState.Success -> {
-                    val data = uiState.data
-
-                    LaunchedEffect(listState) {
-                        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull() }
-                            .collectLatest { lastVisibleItem ->
-                                if(lastVisibleItem != null && !loading && lastVisibleItem.index >= listState.layoutInfo.totalItemsCount - 1) {
-                                    coroutineScope.launch {
-                                        pageState += 1
-                                        onNextPage(queryState, pageState)
-                                    }
-                                }
+                    if (uiState.data.isEmpty()) {
+                        // TODO (비어있음)
+                    } else {
+                        SearchSuccessContent(
+                            uiState = uiState,
+                            listState = listState,
+                            onNextPage = onNextPage,
+                            onUpdateIsFavorite = onUpdateIsFavorite,
+                            onItemClick = {
+                                // TODO (열기)
                             }
+                        )
                     }
-
-                    SearchScreenSuccessContent(
-                        items = data,
-                        listState = listState,
-                        onItemClick = {
-                            // TODO (열기)
-                        },
-                        onUpdateIsFavorite = onUpdateIsFavorite
-                    )
-
-                    LoadingBar(isLoading = loading)
                 }
                 // 비어있을 때와 에러가 발생했을 때
                 SearchUiState.Empty,
                 is SearchUiState.Error -> {
-                    SearchScreenFailContent(
+                    SearchFailContent(
                         uiState = uiState
                     )
                 }
@@ -195,19 +170,39 @@ fun SearchScreen(
 }
 
 @Composable
-internal fun SearchScreenSuccessContent(
-    items: ImmutableList<SearchData>,
+internal fun SearchSuccessContent(
     modifier: Modifier = Modifier,
-    listState: LazyListState,
-    onItemClick: (Int) -> Unit,
+    uiState: SearchUiState.Success,
+    listState: LazyListState = rememberLazyListState(),
+    onNextPage: () -> Unit,
     onUpdateIsFavorite: (SearchData) -> Unit,
+    onItemClick: (Int) -> Unit,
 ) {
+    val loadNextPage by remember(uiState) {
+        derivedStateOf {
+            (listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0) >=
+                    uiState.data.size - 1
+        }
+    }
+
+    LaunchedEffect(loadNextPage) {
+        if(loadNextPage) {
+            onNextPage()
+        }
+    }
+
     LazyColumn(
         modifier = modifier
             .fillMaxSize(),
         state = listState,
     ) {
-        itemsIndexed(items = items) { index, item ->
+        items(
+            count = uiState.data.size,
+            key = { index -> index }
+        ) { index ->
+
+            val item = uiState.data[index]
+
             MediaItemCard(
                 data = item,
                 onUpdateIsFavorite = onUpdateIsFavorite
@@ -217,7 +212,7 @@ internal fun SearchScreenSuccessContent(
 }
 
 @Composable
-internal fun SearchScreenFailContent(
+internal fun SearchFailContent(
     modifier: Modifier = Modifier,
     uiState: SearchUiState
 ) {
@@ -243,14 +238,4 @@ internal fun SearchScreenFailContent(
             }
         )
     }
-}
-
-@Preview(
-    showBackground = true
-)
-@Composable
-internal fun SearchScreenFailContentPreivew() {
-    SearchScreenFailContent(
-        uiState = SearchUiState.Empty
-    )
 }

@@ -12,12 +12,14 @@ sealed interface SearchUiState {
     data object Idle: SearchUiState
 
     @Immutable
+    data object Loading: SearchUiState
+
+    @Immutable
     data object Empty: SearchUiState
 
     @Immutable
     data class Success(
-        val isNextPageExist: Boolean,
-        val data: ImmutableList<SearchData>
+        val data: List<SearchData>
     ) : SearchUiState
 
     @Immutable

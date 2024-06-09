@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 @Composable
 fun LoadingBar(
     modifier: Modifier = Modifier,
-    isLoading: Boolean
+    isLoading: Boolean = true
 ) {
     if(isLoading) {
         Box(
@@ -32,5 +32,5 @@ fun LoadingBar(
 )
 @Composable
 internal fun LoadingBarPreview() {
-    LoadingBar(isLoading = true)
+    LoadingBar()
 }

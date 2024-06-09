@@ -9,6 +9,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
@@ -18,16 +22,16 @@ import com.somnwal.kakaobank.app.core.designsystem.component.AppIcons
 @Composable
 fun KakaoSearchBar(
     modifier: Modifier = Modifier,
-    query: String = "",
-    onQuery: () -> Unit,
+    query: String,
     onQueryChange: (String) -> Unit,
+    onSearch: () -> Unit,
 ) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    val onSearch = {
+    val onSearchTrigger = {
         keyboardController?.hide()
-        onQuery()
+        onSearch()
     }
 
     SearchBar(
@@ -43,12 +47,12 @@ fun KakaoSearchBar(
             onQueryChange(changedQuery)
         },
         onSearch = {
-            onSearch()
+            onSearchTrigger()
         },
         trailingIcon = {
             IconButton(
                 onClick = {
-                    onSearch()
+                    onSearchTrigger()
                 }
             ) {
                 Icon(
