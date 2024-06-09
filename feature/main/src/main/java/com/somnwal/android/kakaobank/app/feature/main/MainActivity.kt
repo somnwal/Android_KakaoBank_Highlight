@@ -21,7 +21,6 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val isDarkTheme by mainViewModel.isDarkTheme.collectAsStateWithLifecycle(initialValue = false, this)
-
             val navigator: MainNavigator = rememberMainNavigator()
 
             KakaoTheme(darkTheme = isDarkTheme) {

@@ -39,8 +39,6 @@ import com.somnwal.android.kakaobank.app.data.model.search.SearchData
 import com.somnwal.android.kakaobank.app.data.model.search.SearchDataType
 import com.somnwal.kakaobank.app.core.designsystem.component.AppIcons
 import com.somnwal.kakaobank.app.core.designsystem.theme.KakaoTheme
-import java.text.SimpleDateFormat
-import java.util.Date
 
 @SuppressLint("SimpleDateFormat", "RememberReturnType")
 @Composable

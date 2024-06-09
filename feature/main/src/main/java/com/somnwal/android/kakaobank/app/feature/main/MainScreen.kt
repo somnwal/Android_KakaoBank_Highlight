@@ -1,5 +1,6 @@
 package com.somnwal.android.kakaobank.app.feature.main
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -49,6 +50,8 @@ internal fun MainScreen(
     val localContextResource = LocalContext.current.resources
     val onShowErrorSnackBar: (error: Throwable?) -> Unit = { error ->
         coroutineScope.launch {
+            Log.e("ERROR", "내용 : ${error?.stackTraceToString()}")
+
             snackbarHostState.showSnackbar(
                 when(error) {
                     else -> localContextResource.getString(R.string.error_message_unknown)
