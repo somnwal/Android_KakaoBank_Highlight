@@ -50,9 +50,6 @@ internal fun SearchRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
-    val searchPage by viewModel.searchPage.collectAsStateWithLifecycle()
-
     LaunchedEffect(true) {
         viewModel.uiState.collectLatest { state ->
             if (state is SearchUiState.Error) {
@@ -87,9 +84,8 @@ fun SearchScreen(
             .fillMaxSize()
             .padding(padding),
     ) {
-
-        var queryState by rememberSaveable { mutableStateOf("고양이") }
-        var listState = rememberLazyListState()
+        var queryState by rememberSaveable { mutableStateOf("") }
+        val listState = rememberLazyListState()
 
         Row(
             modifier = Modifier
@@ -139,19 +135,15 @@ fun SearchScreen(
                     LoadingBar()
                 }
                 is SearchUiState.Success -> {
-                    if (uiState.data.isEmpty()) {
-                        // TODO (비어있음)
-                    } else {
-                        SearchSuccessContent(
-                            uiState = uiState,
-                            listState = listState,
-                            onNextPage = onNextPage,
-                            onUpdateIsFavorite = onUpdateIsFavorite,
-                            onItemClick = {
-                                // TODO (열기)
-                            }
-                        )
-                    }
+                    SearchSuccessContent(
+                        uiState = uiState,
+                        listState = listState,
+                        onNextPage = onNextPage,
+                        onUpdateIsFavorite = onUpdateIsFavorite,
+                        onItemClick = {
+                            // TODO (열기)
+                        }
+                    )
                 }
                 // 비어있을 때와 에러가 발생했을 때
                 SearchUiState.Empty,
@@ -160,10 +152,7 @@ fun SearchScreen(
                         uiState = uiState
                     )
                 }
-
-                else -> {
-
-                }
+                else -> Unit
             }
         }
     }

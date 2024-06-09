@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.somnwal.android.kakaobank.app.core.domain.usecase.GetSearchResultUseCase
 import com.somnwal.android.kakaobank.app.core.domain.usecase.GetSearchResultWithFavoriteUseCase
 import com.somnwal.android.kakaobank.app.core.domain.usecase.UpdateIsFavoriteUseCase
@@ -24,16 +25,25 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.replay
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import okhttp3.internal.notify
+import java.util.Date
 import javax.inject.Inject
 
 private const val SEARCH_QUERY = "searchQuery"
 private const val SEARCH_PAGE = "searchPage"
+private const val SEARCH_LOADING = "searchLoading"
+private const val SEARCH_TIME = "searchTime"
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
@@ -42,30 +52,34 @@ class SearchViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    var searchQuery = savedStateHandle.getStateFlow(
-        key = SEARCH_QUERY,
-        initialValue = ""
-    )
-
-    val searchPage = savedStateHandle.getStateFlow(
-        key = SEARCH_PAGE,
-        initialValue = 1
-    )
+    var searchQuery = savedStateHandle.getStateFlow(key = SEARCH_QUERY, initialValue = "")
+    val searchPage = savedStateHandle.getStateFlow(key = SEARCH_PAGE, initialValue = 1)
+    val searchLoading = savedStateHandle.getStateFlow(key = SEARCH_LOADING, initialValue = false)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState : StateFlow<SearchUiState> =
         searchQuery.flatMapLatest { query ->
             searchPage.flatMapLatest { page ->
-                getSearchResultWithFavoriteUseCase(
-                    query = query,
-                    page = page,
-                    sort = "recency"
-                ).map<SearchResult, SearchUiState> { data ->
-                    SearchUiState.Success(
-                        data = data.resultList
-                    )
-                }.catch { error ->
-                    emit(SearchUiState.Error(error))
+                searchLoading.flatMapLatest { loading ->
+                    if (loading) {
+                        flowOf(SearchUiState.Loading)
+                    } else {
+                        getSearchResultWithFavoriteUseCase(
+                            query = query,
+                            page = page,
+                            sort = "recency"
+                        ).map<SearchResult, SearchUiState> { data ->
+                            if (data.resultList.isEmpty()) {
+                                SearchUiState.Empty
+                            } else {
+                                SearchUiState.Success(
+                                    data = data.resultList
+                                )
+                            }
+                        }.catch { error ->
+                            emit(SearchUiState.Error(error))
+                        }
+                    }
                 }
             }
         }.stateIn(
@@ -74,15 +88,20 @@ class SearchViewModel @Inject constructor(
             initialValue = SearchUiState.Idle
         )
 
+
     fun onSearch(query: String) {
+        setLoading(true)
         savedStateHandle[SEARCH_QUERY] = query
         savedStateHandle[SEARCH_PAGE] = 1
-
-
+        setLoading(false)
     }
 
     fun onNextPage() {
         savedStateHandle[SEARCH_PAGE] = searchPage.value + 1
+    }
+
+    fun setLoading(isLoading: Boolean) {
+        savedStateHandle[SEARCH_LOADING] = isLoading
     }
 
     fun updateIsFavorite(searchData: SearchData) {
