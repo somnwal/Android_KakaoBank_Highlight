@@ -41,16 +41,20 @@ internal fun SearchDetailBottomSheet(
     onUpdateIsFavorite: (SearchData) -> Unit,
     closeSheet: () -> Unit,
 ) {
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
 
     ModalBottomSheet(
+        modifier = modifier,
         onDismissRequest = closeSheet,
         sheetState = sheetState,
         shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
         dragHandle = null
     ) {
         Column(
-            modifier = modifier
+            modifier = Modifier
+                .wrapContentHeight()
                 .padding(
                     top = 24.dp,
                     start = 16.dp,

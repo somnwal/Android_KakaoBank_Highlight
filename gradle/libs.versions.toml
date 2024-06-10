@@ -16,6 +16,7 @@ androidxActivity = "1.9.0"
 composeCompiler = "1.5.14"
 composeBom = "2024.05.00"
 composeMaterial = "1.2.1"
+composeUi = "1.6.7"
 
 # coil
 coil = "2.6.0"
@@ -71,7 +72,7 @@ androidx-activity-compose = { group = "androidx.activity", name = "activity-comp
 
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
-androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "composeUi"}
 androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
