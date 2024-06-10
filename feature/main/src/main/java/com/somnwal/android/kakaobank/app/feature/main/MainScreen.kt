@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import com.somnwal.android.kakaobank.app.feature.favorite.navigation.favoriteNavGraph
@@ -37,6 +38,7 @@ import com.somnwal.android.kakaobank.app.feature.search.navigation.searchNavGrap
 import com.somnwal.kakaobank.app.feature.main.R
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
+import java.net.URLEncoder
 
 @Composable
 internal fun MainScreen(
@@ -75,7 +77,7 @@ internal fun MainScreen(
                         padding = padding,
                         onShowErrorSnackbar = onShowErrorSnackBar,
                         isDarkTheme = isDarkTheme,
-                        onChangeTheme = onChangeTheme,
+                        onChangeTheme = onChangeTheme
                     )
 
                     favoriteNavGraph(
@@ -87,6 +89,7 @@ internal fun MainScreen(
         },
         bottomBar = {
             MainBottomBar(
+                visible = navigator.shouldShowBottomBar(),
                 tabs = MainTab.entries.toPersistentList(),
                 currentTab = navigator.currentTab,
                 onTabSelected = { navigator.navigate(it) }
@@ -98,33 +101,40 @@ internal fun MainScreen(
 
 @Composable
 private fun MainBottomBar(
+    visible: Boolean,
     tabs: List<MainTab>,
     currentTab: MainTab?,
     onTabSelected: (MainTab) -> Unit,
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
+    AnimatedVisibility(
+        visible = visible,
+        enter = fadeIn() + slideIn { IntOffset(0, it.height) },
+        exit = fadeOut() + slideOut { IntOffset(0, it.height) }
     ) {
-        HorizontalDivider(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight(),
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
-            thickness = 1.dp
-        )
-
-        NavigationBar(
-            modifier = Modifier
-                .fillMaxWidth()
+                .wrapContentHeight()
         ) {
-            tabs.forEach { tab ->
-                MainBottomBarItem(
-                    tab = tab,
-                    selected = tab == currentTab,
-                    onClick = { onTabSelected(tab) },
-                )
+            HorizontalDivider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+                thickness = 1.dp
+            )
+
+            NavigationBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                tabs.forEach { tab ->
+                    MainBottomBarItem(
+                        tab = tab,
+                        selected = tab == currentTab,
+                        onClick = { onTabSelected(tab) },
+                    )
+                }
             }
         }
     }

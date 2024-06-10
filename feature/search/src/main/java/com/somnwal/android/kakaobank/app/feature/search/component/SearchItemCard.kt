@@ -42,11 +42,12 @@ import com.somnwal.kakaobank.app.core.designsystem.theme.KakaoTheme
 
 @SuppressLint("SimpleDateFormat", "RememberReturnType")
 @Composable
-fun MediaItemCard(
+fun SearchItemCard(
     modifier: Modifier = Modifier,
     data: SearchData,
     isExpanded: Boolean = false,
-    onUpdateIsFavorite: (SearchData) -> Unit
+    onUpdateIsFavorite: (SearchData) -> Unit,
+    onItemClick: (SearchData) -> Unit
 ) {
     val localDensity = LocalDensity.current
 
@@ -75,7 +76,7 @@ fun MediaItemCard(
                 .wrapContentHeight()
                 .clickable(
                     onClick = {
-
+                        onItemClick(data)
                     }
                 )
         ) {
@@ -179,7 +180,7 @@ fun MediaItemImageCardPreview() {
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            MediaItemCard(
+            SearchItemCard(
                 data = SearchData(
                     type = SearchDataType.IMAGE,
                     title = "이미지",
@@ -187,7 +188,8 @@ fun MediaItemImageCardPreview() {
                     thumbnailUrl = "https://avatars.githubusercontent.com/u/90139018?v=4",
                     datetime = "2024-01-01",
                 ),
-                onUpdateIsFavorite = { }
+                onUpdateIsFavorite = { },
+                onItemClick = {  }
             )
         }
     }
@@ -205,7 +207,7 @@ fun MediaItemVideoCardPreview() {
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            MediaItemCard(
+            SearchItemCard(
                 data = SearchData(
                     type = SearchDataType.VIDEO,
                     title = "동영상",
@@ -213,7 +215,8 @@ fun MediaItemVideoCardPreview() {
                     thumbnailUrl = "https://avatars.githubusercontent.com/u/90139018?v=4",
                     datetime = "2024-01-01",
                 ),
-                onUpdateIsFavorite = { }
+                onUpdateIsFavorite = { },
+                onItemClick = {  }
             )
         }
     }

@@ -18,7 +18,12 @@ fun NavGraphBuilder.searchNavGraph(
     onChangeTheme: (Boolean) -> Unit
 ) {
     composable(route = SearchRoute.ROUTE) {
-        SearchRoute(padding, onShowErrorSnackbar, isDarkTheme, onChangeTheme)
+        SearchRoute(
+            padding = padding,
+            onShowErrorSnackBar = onShowErrorSnackbar,
+            isDarkTheme = isDarkTheme,
+            onChangeTheme = onChangeTheme
+        )
     }
 }
 

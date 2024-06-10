@@ -27,15 +27,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.somnwal.android.kakaobank.app.data.model.search.SearchData
+import com.somnwal.android.kakaobank.app.data.model.search.SearchDataType
 import com.somnwal.android.kakaobank.app.feature.search.component.KakaoSearchBar
-import com.somnwal.android.kakaobank.app.feature.search.component.MediaItemCard
+import com.somnwal.android.kakaobank.app.feature.search.component.SearchDetailBottomSheet
+import com.somnwal.android.kakaobank.app.feature.search.component.SearchDetailBottomSheetPreivew
+import com.somnwal.android.kakaobank.app.feature.search.component.SearchItemCard
 import com.somnwal.android.kakaobank.app.feature.search.state.SearchUiState
 import com.somnwal.kakaobank.app.core.designsystem.component.AppIcons
 import com.somnwal.kakaobank.app.core.designsystem.component.LoadingBar
+import com.somnwal.kakaobank.app.core.designsystem.theme.KakaoTheme
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -63,7 +69,7 @@ internal fun SearchRoute(
         uiState = uiState,
         onSearch = viewModel::onSearch,
         onNextPage = viewModel::onNextPage,
-        onUpdateIsFavorite = viewModel::updateIsFavorite
+        onUpdateIsFavorite = viewModel::updateIsFavorite,
     )
 }
 
@@ -75,14 +81,14 @@ fun SearchScreen(
     uiState: SearchUiState,
     onSearch: (String) -> Unit,
     onNextPage: () -> Unit,
-    onUpdateIsFavorite: (SearchData) -> Unit,
+    onUpdateIsFavorite: (SearchData) -> Unit
 ) {
     Column (
         modifier = Modifier
             .fillMaxSize()
             .padding(padding),
     ) {
-        var queryState by rememberSaveable { mutableStateOf("") }
+        var queryState by rememberSaveable { mutableStateOf("고양이") }
         val listState = rememberLazyListState()
 
         Row(
@@ -133,15 +139,31 @@ fun SearchScreen(
                     LoadingBar()
                 }
                 is SearchUiState.Success -> {
+                    var isSearchDetailBottomSheetOpen by remember { mutableStateOf(false) }
+                    var selected by remember { mutableStateOf<SearchData?>(null) }
+
                     SearchSuccessContent(
                         uiState = uiState,
                         listState = listState,
                         onNextPage = onNextPage,
                         onUpdateIsFavorite = onUpdateIsFavorite,
-                        onItemClick = {
-                            // TODO (열기)
+                        onItemClick = { searchData ->
+                            selected = searchData
+                            isSearchDetailBottomSheetOpen = true
                         }
                     )
+
+                    selected?.let {
+                        if(isSearchDetailBottomSheetOpen) {
+                            SearchDetailBottomSheet(
+                                data = selected!!,
+                                onUpdateIsFavorite = onUpdateIsFavorite,
+                                closeSheet = {
+                                    isSearchDetailBottomSheetOpen = false
+                                }
+                            )
+                        }
+                    }
                 }
                 // 비어있을 때와 에러가 발생했을 때
                 SearchUiState.Empty,
@@ -152,6 +174,8 @@ fun SearchScreen(
                 }
                 else -> Unit
             }
+
+
         }
     }
 }
@@ -163,7 +187,7 @@ internal fun SearchSuccessContent(
     listState: LazyListState = rememberLazyListState(),
     onNextPage: () -> Unit,
     onUpdateIsFavorite: (SearchData) -> Unit,
-    onItemClick: (Int) -> Unit,
+    onItemClick: (SearchData) -> Unit,
 ) {
     val loadNextPage by remember(uiState) {
         derivedStateOf {
@@ -190,9 +214,10 @@ internal fun SearchSuccessContent(
 
             val item = uiState.data[index]
 
-            MediaItemCard(
+            SearchItemCard(
                 data = item,
-                onUpdateIsFavorite = onUpdateIsFavorite
+                onUpdateIsFavorite = onUpdateIsFavorite,
+                onItemClick = onItemClick
             )
         }
     }
@@ -223,6 +248,87 @@ internal fun SearchFailContent(
                     ""
                 }
             }
+        )
+    }
+}
+
+@Preview(
+    device = Devices.PHONE,
+    showBackground = true
+)
+@Composable
+fun SearchScreenSuccessPreview() {
+    KakaoTheme {
+        SearchScreen(
+            padding = PaddingValues(),
+            isDarkTheme = false,
+            onChangeTheme = { },
+            uiState = SearchUiState.Success(
+                data = listOf(
+                    SearchData(
+                        type =  SearchDataType.IMAGE,
+                        title = "이미지",
+                        thumbnailUrl = "",
+                        url = "",
+                        datetime = "9999-12-31"
+                    ),
+                    SearchData(
+                    type =  SearchDataType.VIDEO,
+                    title = "비디오",
+                    thumbnailUrl = "",
+                    url = "",
+                    datetime = "9999-12-31"
+                    ).apply { isFavorite = true },
+                    SearchData(
+                        type =  SearchDataType.VIDEO,
+                        title = "비디오",
+                        thumbnailUrl = "",
+                        url = "",
+                        datetime = "9999-12-31"
+                    )
+                )
+            ),
+            onSearch = { },
+            onNextPage = { /*TODO*/ },
+            onUpdateIsFavorite = { },
+        )
+    }
+}
+
+@Preview(
+    device = Devices.PHONE,
+    showBackground = true
+)
+@Composable
+fun SearchScreenEmptyPreview() {
+    KakaoTheme {
+        SearchScreen(
+            padding = PaddingValues(),
+            isDarkTheme = false,
+            onChangeTheme = { },
+            uiState = SearchUiState.Empty,
+            onSearch = { },
+            onNextPage = { /*TODO*/ },
+            onUpdateIsFavorite = { },
+        )
+    }
+}
+
+@Preview(
+    device = Devices.PHONE,
+    showBackground = true
+)
+@Composable
+fun SearchScreenFailPreview() {
+    KakaoTheme {
+        SearchScreen(
+            padding = PaddingValues(),
+            isDarkTheme = false,
+            onChangeTheme = { },
+            uiState = SearchUiState.Error(data = Throwable("오류 발생")),
+            onSearch = { },
+            onNextPage = { /*TODO*/ },
+            onUpdateIsFavorite = { },
         )
     }
 }
