@@ -2,6 +2,8 @@ package com.somnwal.kakaobank.app.core.designsystem.component
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.Favorite
@@ -25,5 +27,8 @@ class AppIcons {
 
         val ICON_LIGHT_THEME_OUTLINED = Icons.Outlined.LightMode
         val ICON_DARK_THEME_OUTLINED = Icons.Outlined.DarkMode
+
+        val ICON_PLAY = Icons.Filled.PlayArrow
+        val ICON_PAUSE = Icons.Filled.Pause
     }
 }

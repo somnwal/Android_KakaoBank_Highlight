@@ -5,7 +5,6 @@ plugins {
 android {
     namespace = "com.somnwal.kakaobank.app"
 
-
     defaultConfig {
         applicationId = "com.somnwal.kakaobank.app"
         versionCode = 1

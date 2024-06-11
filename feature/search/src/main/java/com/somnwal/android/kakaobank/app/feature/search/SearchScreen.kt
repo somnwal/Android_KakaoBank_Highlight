@@ -35,8 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.somnwal.android.kakaobank.app.data.model.search.SearchData
 import com.somnwal.android.kakaobank.app.data.model.search.SearchDataType
 import com.somnwal.android.kakaobank.app.feature.search.component.KakaoSearchBar
-import com.somnwal.android.kakaobank.app.feature.search.component.SearchDetailBottomSheet
-import com.somnwal.android.kakaobank.app.feature.search.component.SearchDetailBottomSheetPreivew
+import com.somnwal.kakaobank.app.core.designsystem.component.SearchDetailBottomSheet
 import com.somnwal.android.kakaobank.app.feature.search.component.SearchItemCard
 import com.somnwal.android.kakaobank.app.feature.search.state.SearchUiState
 import com.somnwal.kakaobank.app.core.designsystem.component.AppIcons

@@ -1,4 +1,4 @@
-package com.somnwal.android.kakaobank.app.feature.search.component
+package com.somnwal.kakaobank.app.core.designsystem.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +17,11 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,12 +35,11 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.somnwal.android.kakaobank.app.data.model.search.SearchData
 import com.somnwal.android.kakaobank.app.data.model.search.SearchDataType
-import com.somnwal.kakaobank.app.core.designsystem.component.AppIcons
 import com.somnwal.kakaobank.app.core.designsystem.theme.KakaoTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun SearchDetailBottomSheet(
+fun SearchDetailBottomSheet(
     modifier: Modifier = Modifier,
     data: SearchData,
     onUpdateIsFavorite: (SearchData) -> Unit,
@@ -45,8 +49,11 @@ internal fun SearchDetailBottomSheet(
         skipPartiallyExpanded = true
     )
 
+    var isFavorite by remember { mutableStateOf(data.isFavorite) }
+
     ModalBottomSheet(
-        modifier = modifier,
+        modifier = modifier
+            .wrapContentHeight(),
         onDismissRequest = closeSheet,
         sheetState = sheetState,
         shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
@@ -71,17 +78,27 @@ internal fun SearchDetailBottomSheet(
 
             Spacer(modifier = Modifier.size(16.dp))
 
-            SubcomposeAsyncImage(
-                modifier = Modifier
-                    .fillMaxWidth(1f)
-                    .aspectRatio(1f),
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(data.url)
-                    .crossfade(true)
-                    .build(),
-                contentScale = ContentScale.Crop,
-                contentDescription = "이미지"
-            )
+            when(data.type) {
+                SearchDataType.IMAGE -> {
+                    SubcomposeAsyncImage(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(1f)
+                            .aspectRatio(1f),
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(data.url)
+                            .crossfade(true)
+                            .build(),
+                        contentScale = ContentScale.Crop,
+                        contentDescription = "이미지"
+                    )
+                }
+                SearchDataType.VIDEO -> {
+                    VideoPlayer(
+                        uri = data.url
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.size(16.dp))
 
@@ -115,10 +132,11 @@ internal fun SearchDetailBottomSheet(
                             .padding(6.dp)
                             .clickable(
                                 onClick = {
+                                    isFavorite = !isFavorite
                                     onUpdateIsFavorite(data)
                                 }
                             ),
-                        imageVector = if(data.isFavorite) {
+                        imageVector = if(isFavorite) {
                             AppIcons.ICON_FAVORITE_FILLED
                         } else {
                             AppIcons.ICON_FAVORITE_OUTLINED

@@ -21,8 +21,10 @@ composeUi = "1.6.7"
 # coil
 coil = "2.6.0"
 
+# ExoPlayer
+exoPlayer = "1.3.1"
+
 composeNavigation = "2.7.7"
-composeConstraintlayout = "3.1.1"
 composePaging = "3.3.0"
 
 # Hilt
@@ -112,6 +114,10 @@ coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 coil-kt-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }
 
+# ExoPlayer
+exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "exoPlayer" }
+exoplayer-dash = { group = "androidx.media3", name = "media3-exoplayer-dash", version.ref = "exoPlayer" }
+exoplayer-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "exoPlayer" }
 
 # Test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
