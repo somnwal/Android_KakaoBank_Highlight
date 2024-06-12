@@ -21,18 +21,15 @@ class GetSearchResultWithFavoriteUseCase @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     suspend operator fun invoke(
         query: String,
-        sort: String,
-        page: Int
-    ): Flow<SearchResult> =
-        getSearchResultUseCase(query, sort, page)
+        page: Int,
+        sort: String
+    ): Flow<List<SearchData>> =
+        getSearchResultUseCase(query, page, sort)
             .combine(getFavoriteListUseCase().distinctUntilChanged()) { searchResult, favoriteList ->
-                SearchResult(
-                    isNextPageExist = searchResult.isNextPageExist,
-                    resultList = searchResult.resultList.map {
-                        it.copy().apply {
-                            isFavorite = favoriteList.contains(it)
-                        }
+                searchResult.map {
+                    it.copy().apply {
+                        isFavorite = favoriteList.contains(it)
                     }
-                )
+                }
             }
 }

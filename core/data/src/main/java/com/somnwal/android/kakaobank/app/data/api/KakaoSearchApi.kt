@@ -12,16 +12,16 @@ interface KakaoSearchApi {
     @GET("/v2/search/image")
     suspend fun searchImage(
         @Query("query") query: String,
-        @Query("sort") sort: String,
         @Query("page") page: Int,
+        @Query("sort") sort: String,
         @Query("size") size: Int = ServerConfig.KAKAO_API_IMAGE_SEARCH_PAGE_SIZE,
     ) : Response<KakaoSearchImageApiResponse>
 
     @GET("/v2/search/vclip")
     suspend fun searchVideo(
         @Query("query") query: String,
-        @Query("sort") sort: String,
         @Query("page") page: Int,
+        @Query("sort") sort: String,
         @Query("size") size: Int = ServerConfig.KAKAO_API_VIDEO_SEARCH_PAGE_SIZE,
     ) : Response<KakaoSearchVideoApiResponse>
 }

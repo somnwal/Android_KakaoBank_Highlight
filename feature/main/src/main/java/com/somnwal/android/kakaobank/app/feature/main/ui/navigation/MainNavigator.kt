@@ -7,9 +7,12 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import androidx.navigation.navOptions
+import com.somnwal.android.kakaobank.app.data.model.search.SearchData
 import com.somnwal.android.kakaobank.app.feature.favorite.navigation.navigateFavorite
 import com.somnwal.android.kakaobank.app.feature.search.navigation.navigateSearch
+import com.somnwal.android.kakaobank.app.feature.search.navigation.navigateSearchDetail
 
 internal class MainNavigator(
     val navController: NavHostController
@@ -52,6 +55,15 @@ internal class MainNavigator(
     fun shouldShowBottomBar(): Boolean {
         val currentRoute = currentDestination?.route ?: return false
         return currentRoute in MainTab
+    }
+
+    fun navigateSearchDetail(searchData: SearchData) {
+        val navOptions = navOptions {
+            launchSingleTop = true
+            restoreState = true
+        }
+
+        navController.navigateSearchDetail(navOptions, searchData)
     }
 }
 

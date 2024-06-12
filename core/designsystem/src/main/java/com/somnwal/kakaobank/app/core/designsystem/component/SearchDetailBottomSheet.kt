@@ -49,8 +49,6 @@ fun SearchDetailBottomSheet(
         skipPartiallyExpanded = true
     )
 
-    var isFavorite by remember { mutableStateOf(data.isFavorite) }
-
     ModalBottomSheet(
         modifier = modifier
             .wrapContentHeight(),
@@ -132,11 +130,10 @@ fun SearchDetailBottomSheet(
                             .padding(6.dp)
                             .clickable(
                                 onClick = {
-                                    isFavorite = !isFavorite
                                     onUpdateIsFavorite(data)
                                 }
                             ),
-                        imageVector = if(isFavorite) {
+                        imageVector = if(data.isFavorite) {
                             AppIcons.ICON_FAVORITE_FILLED
                         } else {
                             AppIcons.ICON_FAVORITE_OUTLINED

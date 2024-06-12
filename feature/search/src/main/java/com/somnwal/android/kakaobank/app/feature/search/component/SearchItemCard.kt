@@ -54,8 +54,6 @@ fun SearchItemCard(
     var imageUrl by remember { mutableStateOf(data.thumbnailUrl) }
     var imageDisplayRatio by rememberSaveable { mutableFloatStateOf(0.3f) }
 
-    var isFavorite by remember { mutableStateOf(data.isFavorite) }
-
     LaunchedEffect(isExpanded) {
         if (isExpanded) {
             imageDisplayRatio = 1f
@@ -151,11 +149,10 @@ fun SearchItemCard(
                         .padding(6.dp)
                         .clickable(
                             onClick = {
-                                isFavorite = !isFavorite
                                 onUpdateIsFavorite(data)
                             }
                         ),
-                    imageVector = if(isFavorite) {
+                    imageVector = if(data.isFavorite) {
                         AppIcons.ICON_FAVORITE_FILLED
                     } else {
                         AppIcons.ICON_FAVORITE_OUTLINED

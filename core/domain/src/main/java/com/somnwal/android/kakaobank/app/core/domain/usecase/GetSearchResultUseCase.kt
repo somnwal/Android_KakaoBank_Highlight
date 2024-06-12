@@ -12,8 +12,8 @@ class GetSearchResultUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         query: String,
-        sort: String,
-        page: Int
-    ): Flow<SearchResult> =
-        searchRepository.getSearchResult(query, sort, page)
+        page: Int,
+        sort: String
+    ): Flow<List<SearchData>> =
+        searchRepository.getSearchResult(query, page, sort)
 }

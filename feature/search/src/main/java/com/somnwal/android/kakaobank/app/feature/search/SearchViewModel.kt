@@ -68,12 +68,12 @@ class SearchViewModel @Inject constructor(
                             query = query,
                             page = page,
                             sort = "recency"
-                        ).map<SearchResult, SearchUiState> { data ->
-                            if (data.resultList.isEmpty()) {
+                        ).map<List<SearchData>, SearchUiState> { data ->
+                            if (data.isEmpty()) {
                                 SearchUiState.Empty
                             } else {
                                 SearchUiState.Success(
-                                    data = data.resultList
+                                    data = data
                                 )
                             }
                         }.catch { error ->
