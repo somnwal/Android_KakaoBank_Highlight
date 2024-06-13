@@ -72,23 +72,20 @@ class SearchViewModel @Inject constructor(
             page  : ${_page.value}
         """.trimIndent())
 
-        getSearchResultWithFavoriteUseCase(_query.value, _page.value, "recency")
-            .map { data ->
-                Log.d("로그", "data : $data")
+        viewModelScope.launch {
+            getSearchResultWithFavoriteUseCase(_query.value, _page.value, "recency")
+                .collectLatest { data ->
+                    Log.d("로그", "data : $data")
 
-                if(data.isEmpty()) {
-                    _uiState.value = SearchUiState.Empty
-                } else {
-                    _uiState.value = SearchUiState.Success(data = data)
+                    if(data.isEmpty()) {
+                        _uiState.value = SearchUiState.Empty
+                    } else {
+                        _uiState.value = SearchUiState.Success(data = data)
+                    }
+
+                    setLoading(false)
                 }
-
-                setLoading(false)
-            }.catch { error ->
-                _uiState.value = SearchUiState.Error
-                _errorState.value = error
-
-                setLoading(false)
-            }
+        }
     }
 
     fun onNextPage() {

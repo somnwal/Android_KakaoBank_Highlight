@@ -10,7 +10,7 @@ import retrofit2.http.Query
 interface KakaoSearchApi {
 
     @GET("/v2/search/image")
-    fun searchImage(
+    suspend fun searchImage(
         @Query("query") query: String,
         @Query("page") page: Int,
         @Query("sort") sort: String,
@@ -18,7 +18,7 @@ interface KakaoSearchApi {
     ) : Response<KakaoSearchImageApiResponse>
 
     @GET("/v2/search/vclip")
-    fun searchVideo(
+    suspend fun searchVideo(
         @Query("query") query: String,
         @Query("page") page: Int,
         @Query("sort") sort: String,

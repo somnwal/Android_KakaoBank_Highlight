@@ -15,10 +15,5 @@ class GetSearchResultUseCase @Inject constructor(
         query: String,
         page: Int,
         sort: String
-    ): Flow<List<SearchData>> {
-        Log.d("로그", "Call GetSearchResultUseCase >>>")
-
-        return searchRepository.getSearchResult(query, page, sort)
-    }
-
+    ): Flow<List<SearchData>> = searchRepository.getSearchResult(query, page, sort)
 }

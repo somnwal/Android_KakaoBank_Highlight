@@ -7,9 +7,11 @@ import com.somnwal.android.kakaobank.app.data.model.search.SearchResult
 import com.somnwal.kakaobank.app.core.data.repository.api.SearchRepository
 import com.somnwal.android.kakaobank.app.data.mapper.toData
 import com.somnwal.android.kakaobank.app.data.model.search.SearchData
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.merge
 import javax.inject.Inject
 
@@ -19,30 +21,31 @@ class DefaultSearchRepository @Inject constructor(
 
     private var savedSearchDataList = listOf<SearchData>()
 
-    private var isNextImagePageExist = false
-    private var isNextVideoPageExist = false
+    private var isNextImagePageExist = true
+    private var isNextVideoPageExist = true
 
     override fun getSearchResult(
         query: String,
         page: Int,
         sort: String
-    ) : Flow<List<SearchData>> {
-        Log.d("로그","Call getSearchResult >>>")
+    ): Flow<List<SearchData>> = flow {
 
-        if(page == 1) savedSearchDataList = listOf()
+        if(page == 1) {
+            savedSearchDataList = listOf()
+        }
 
-        return flowOf(
-            getMergedSearchResult(
-                if(page == 1 || isNextImagePageExist) searchApi.searchImage(query, page, sort).body()?.toData() else null,
-                if(page == 1 || isNextVideoPageExist) searchApi.searchVideo(query, page, sort).body()?.toData() else null
-            )
-        )
-    }
+        val imageResult = if(page == 1 || isNextImagePageExist) {
+            searchApi.searchImage(query, page, sort).body()?.toData()
+        } else {
+            null
+        }
 
-    private fun getMergedSearchResult(
-        imageResult: SearchResult? = null,
-        videoResult: SearchResult? = null
-    ) : List<SearchData> {
+        val videoResult = if(page == 1 || isNextVideoPageExist) {
+            searchApi.searchVideo(query, page, sort).body()?.toData()
+        } else {
+            null
+        }
+
         isNextImagePageExist = imageResult?.isNextPageExist ?: false
         isNextVideoPageExist = videoResult?.isNextPageExist ?: false
 
@@ -50,11 +53,14 @@ class DefaultSearchRepository @Inject constructor(
         val videoResultList = videoResult?.resultList ?: emptyList()
 
         val mergedSearchResult = (savedSearchDataList + imageResultList + videoResultList)
+        savedSearchDataList = mergedSearchResult
 
-        Log.d("로그","mergedSearchResult : ${mergedSearchResult}")
+        Log.d("로그", "savedSearchDataList : ${savedSearchDataList}")
 
-        return mergedSearchResult.sortedByDescending {
-            it.datetime
-        }
-    }
+        emit(
+            mergedSearchResult.sortedByDescending {
+                it.datetime
+            }
+        )
+    }.flowOn(Dispatchers.IO)
 }
