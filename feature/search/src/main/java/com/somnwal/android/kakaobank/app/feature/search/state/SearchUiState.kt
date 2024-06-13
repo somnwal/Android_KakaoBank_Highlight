@@ -11,9 +11,6 @@ sealed interface SearchUiState {
     data object Idle: SearchUiState
 
     @Immutable
-    data object Loading: SearchUiState
-
-    @Immutable
     data object Empty: SearchUiState
 
     @Immutable
@@ -22,7 +19,5 @@ sealed interface SearchUiState {
     ) : SearchUiState
 
     @Immutable
-    data class Error(
-        val data: Throwable?
-    ) : SearchUiState
+    data object Error: SearchUiState
 }

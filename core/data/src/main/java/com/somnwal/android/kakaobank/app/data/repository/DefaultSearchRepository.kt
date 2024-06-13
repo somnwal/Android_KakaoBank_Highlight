@@ -9,6 +9,7 @@ import com.somnwal.android.kakaobank.app.data.mapper.toData
 import com.somnwal.android.kakaobank.app.data.model.search.SearchData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.merge
 import javax.inject.Inject
 
@@ -21,15 +22,16 @@ class DefaultSearchRepository @Inject constructor(
     private var isNextImagePageExist = false
     private var isNextVideoPageExist = false
 
-    override suspend fun getSearchResult(
+    override fun getSearchResult(
         query: String,
         page: Int,
         sort: String
-    ) : Flow<List<SearchData>> = flow {
+    ) : Flow<List<SearchData>> {
+        Log.d("로그","Call getSearchResult >>>")
 
         if(page == 1) savedSearchDataList = listOf()
 
-        emit(
+        return flowOf(
             getMergedSearchResult(
                 if(page == 1 || isNextImagePageExist) searchApi.searchImage(query, page, sort).body()?.toData() else null,
                 if(page == 1 || isNextVideoPageExist) searchApi.searchVideo(query, page, sort).body()?.toData() else null
@@ -48,6 +50,8 @@ class DefaultSearchRepository @Inject constructor(
         val videoResultList = videoResult?.resultList ?: emptyList()
 
         val mergedSearchResult = (savedSearchDataList + imageResultList + videoResultList)
+
+        Log.d("로그","mergedSearchResult : ${mergedSearchResult}")
 
         return mergedSearchResult.sortedByDescending {
             it.datetime

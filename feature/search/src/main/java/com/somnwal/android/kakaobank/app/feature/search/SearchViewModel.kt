@@ -15,6 +15,7 @@ import com.somnwal.android.kakaobank.app.data.model.search.SearchResult
 import com.somnwal.android.kakaobank.app.feature.search.state.SearchUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -27,6 +28,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -40,68 +42,61 @@ import okhttp3.internal.notify
 import java.util.Date
 import javax.inject.Inject
 
-private const val SEARCH_QUERY = "searchQuery"
-private const val SEARCH_PAGE = "searchPage"
-private const val SEARCH_LOADING = "searchLoading"
-private const val SEARCH_TIME = "searchTime"
-
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val getSearchResultWithFavoriteUseCase: GetSearchResultWithFavoriteUseCase,
     private val updateIsFavoriteUseCase: UpdateIsFavoriteUseCase,
-    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    var searchQuery = savedStateHandle.getStateFlow(key = SEARCH_QUERY, initialValue = "")
-    val searchPage = savedStateHandle.getStateFlow(key = SEARCH_PAGE, initialValue = 1)
-    val searchLoading = savedStateHandle.getStateFlow(key = SEARCH_LOADING, initialValue = false)
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val uiState : StateFlow<SearchUiState> =
-        searchQuery.flatMapLatest { query ->
-            searchPage.flatMapLatest { page ->
-                searchLoading.flatMapLatest { loading ->
-                    if (loading) {
-                        flowOf(SearchUiState.Loading)
-                    } else {
-                        getSearchResultWithFavoriteUseCase(
-                            query = query,
-                            page = page,
-                            sort = "recency"
-                        ).map<List<SearchData>, SearchUiState> { data ->
-                            if (data.isEmpty()) {
-                                SearchUiState.Empty
-                            } else {
-                                SearchUiState.Success(
-                                    data = data
-                                )
-                            }
-                        }.catch { error ->
-                            emit(SearchUiState.Error(error))
-                        }
-                    }
-                }
-            }
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = SearchUiState.Idle
-        )
+    var _query = MutableStateFlow("")
+    val _page = MutableStateFlow(1)
 
 
-    fun onSearch(query: String) {
+    private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Idle)
+    private val _loadingState = MutableStateFlow(false)
+    private val _errorState = MutableStateFlow<Throwable?>(null)
+
+    val uiState : StateFlow<SearchUiState> = _uiState.asStateFlow()
+    val loadingState : StateFlow<Boolean> = _loadingState.asStateFlow()
+    val errorState : StateFlow<Throwable?> = _errorState.asStateFlow()
+
+    fun onSearch(query: String, page: Int = 1) {
+        Log.d("로그", "Call onSearch >>>")
         setLoading(true)
-        savedStateHandle[SEARCH_QUERY] = query
-        savedStateHandle[SEARCH_PAGE] = 1
-        setLoading(false)
+
+        _query.value = query
+        _page.value = page
+
+        Log.d("로그", """doSearch >>>
+            query : ${_query.value}
+            page  : ${_page.value}
+        """.trimIndent())
+
+        getSearchResultWithFavoriteUseCase(_query.value, _page.value, "recency")
+            .map { data ->
+                Log.d("로그", "data : $data")
+
+                if(data.isEmpty()) {
+                    _uiState.value = SearchUiState.Empty
+                } else {
+                    _uiState.value = SearchUiState.Success(data = data)
+                }
+
+                setLoading(false)
+            }.catch { error ->
+                _uiState.value = SearchUiState.Error
+                _errorState.value = error
+
+                setLoading(false)
+            }
     }
 
     fun onNextPage() {
-        savedStateHandle[SEARCH_PAGE] = searchPage.value + 1
+        onSearch(_query.value, _page.value + 1)
     }
 
     fun setLoading(isLoading: Boolean) {
-        savedStateHandle[SEARCH_LOADING] = isLoading
+        _loadingState.value = isLoading
     }
 
     fun updateIsFavorite(searchData: SearchData) {
