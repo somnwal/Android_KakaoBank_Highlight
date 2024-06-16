@@ -19,5 +19,7 @@ sealed interface SearchUiState {
     ) : SearchUiState
 
     @Immutable
-    data object Error: SearchUiState
+    data class Error(
+        val data: Throwable?
+    ): SearchUiState
 }

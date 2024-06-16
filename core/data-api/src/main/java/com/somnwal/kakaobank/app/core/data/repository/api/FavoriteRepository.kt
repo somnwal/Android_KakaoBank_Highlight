@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface FavoriteRepository {
 
-    fun getFavoriteList() : Flow<List<SearchData>>
+    val favoriteList: Flow<List<SearchData>>
 
     suspend fun updateFavoriteList(
         data: SearchData,

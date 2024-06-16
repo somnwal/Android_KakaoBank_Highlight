@@ -53,7 +53,6 @@ internal fun SearchRoute(
     viewModel: SearchViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val loadingState by viewModel.loadingState.collectAsStateWithLifecycle()
     val errorState by viewModel.errorState.collectAsStateWithLifecycle()
 
     LaunchedEffect(errorState) {
@@ -67,7 +66,6 @@ internal fun SearchRoute(
         isDarkTheme = isDarkTheme,
         onChangeTheme = onChangeTheme,
         uiState = uiState,
-        loadingState = loadingState,
         onSearch = viewModel::onSearch,
         onNextPage = viewModel::onNextPage,
         onUpdateIsFavorite = viewModel::updateIsFavorite,
@@ -80,7 +78,6 @@ fun SearchScreen(
     isDarkTheme: Boolean,
     onChangeTheme: (Boolean) -> Unit,
     uiState: SearchUiState,
-    loadingState: Boolean,
     onSearch: (String) -> Unit,
     onNextPage: () -> Unit,
     onUpdateIsFavorite: (SearchData) -> Unit
@@ -174,9 +171,9 @@ fun SearchScreen(
                 else -> Unit
             }
 
-            if(loadingState) {
+            /*if(loadingState) {
                 LoadingBar()
-            }
+            }*/
         }
     }
 }
@@ -239,7 +236,7 @@ internal fun SearchFailContent(
                 SearchUiState.Empty -> {
                     "조회결과가 존재하지 않습니다."
                 }
-                SearchUiState.Error -> {
+                is SearchUiState.Error -> {
                     "조회 중 오류가 발생했습니다."
                 }
                 else -> {
@@ -286,7 +283,6 @@ fun SearchScreenSuccessPreview() {
                     )
                 )
             ),
-            loadingState = true,
             onSearch = { },
             onNextPage = { /*TODO*/ },
             onUpdateIsFavorite = { },
@@ -306,7 +302,6 @@ fun SearchScreenEmptyPreview() {
             isDarkTheme = false,
             onChangeTheme = { },
             uiState = SearchUiState.Empty,
-            loadingState = true,
             onSearch = { },
             onNextPage = { /*TODO*/ },
             onUpdateIsFavorite = { },
@@ -325,8 +320,7 @@ fun SearchScreenFailPreview() {
             padding = PaddingValues(),
             isDarkTheme = false,
             onChangeTheme = { },
-            uiState = SearchUiState.Error,
-            loadingState = true,
+            uiState = SearchUiState.Error(Throwable("!!")),
             onSearch = { },
             onNextPage = { /*TODO*/ },
             onUpdateIsFavorite = { },

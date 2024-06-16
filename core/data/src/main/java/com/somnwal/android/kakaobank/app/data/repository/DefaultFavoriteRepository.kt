@@ -16,32 +16,12 @@ import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 class DefaultFavoriteRepository @Inject constructor(
-    private val favoriteDataSource: FavoritePreferencesDataSource
+    private val favoriteDataSource: FavoritePreferencesDataSource,
 ) : FavoriteRepository {
 
-    private val _favoriteList: Flow<Set<String>> = favoriteDataSource.favoriteList
-
-    override fun getFavoriteList(): Flow<List<SearchData>> =
-        _favoriteList.map { favoriteSet ->
-            favoriteSet.toList().map { dataString ->
-                Json.decodeFromString<SearchData>(dataString)
-            }.sortedByDescending {
-                it.datetime
-            }
-        }
+    override val favoriteList: Flow<List<SearchData>> = favoriteDataSource.favoriteList
 
     override suspend fun updateFavoriteList(data: SearchData, isFavorite: Boolean) {
-        val currentFavoriteList = _favoriteList.first()
-
-        // 활성화 및 비활성화
-        favoriteDataSource.updateFavoriteList(
-            if(isFavorite) {
-                currentFavoriteList + Json.encodeToString(SearchData.serializer(), data.apply {
-                    this.isFavorite = true
-                })
-            } else {
-                currentFavoriteList - Json.encodeToString(SearchData.serializer(), data)
-            }
-        )
+        favoriteDataSource.updateFavoriteList(data, isFavorite)
     }
 }

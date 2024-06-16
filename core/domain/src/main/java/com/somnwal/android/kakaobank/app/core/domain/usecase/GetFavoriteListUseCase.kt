@@ -9,10 +9,5 @@ import javax.inject.Inject
 class GetFavoriteListUseCase @Inject constructor(
     private val favoriteRepository: FavoriteRepository
 ) {
-    operator fun invoke() : Flow<List<SearchData>> {
-        Log.d("로그", "Call GetFavoriteListUseCase >>>")
-
-        return favoriteRepository.getFavoriteList()
-    }
-
+    operator fun invoke() : Flow<List<SearchData>> = favoriteRepository.favoriteList
 }

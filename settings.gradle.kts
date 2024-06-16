@@ -18,15 +18,17 @@ dependencyResolutionManagement {
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-rootProject.name = "kakaobank"
+rootProject.name = "search"
 include(":app")
 
 include(
     ":core:data",
     ":core:data-api",
     ":core:datastore",
+    ":core:datastore-proto",
     ":core:designsystem",
     ":core:model",
+    ":core:domain"
 )
 
 include(
@@ -34,4 +36,3 @@ include(
     ":feature:search",
     ":feature:favorite",
 )
-include(":core:domain")

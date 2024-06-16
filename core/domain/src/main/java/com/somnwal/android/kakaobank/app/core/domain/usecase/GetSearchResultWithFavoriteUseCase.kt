@@ -3,6 +3,8 @@ package com.somnwal.android.kakaobank.app.core.domain.usecase
 import android.util.Log
 import com.somnwal.android.kakaobank.app.data.model.search.SearchData
 import com.somnwal.android.kakaobank.app.data.model.search.SearchResult
+import com.somnwal.kakaobank.app.core.data.repository.api.FavoriteRepository
+import com.somnwal.kakaobank.app.core.data.repository.api.SearchRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -20,48 +22,22 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class GetSearchResultWithFavoriteUseCase @Inject constructor(
-    private val getSearchResultUseCase: GetSearchResultUseCase,
-    private val getFavoriteListUseCase: GetFavoriteListUseCase,
+    private val searchRepository: SearchRepository,
+    private val favoriteRepository: FavoriteRepository
 ) {
     operator fun invoke(
         query: String,
         page: Int,
-        sort: String
-    ): Flow<List<SearchData>> = channelFlow {
+        sort: String = "recency"
+    ): Flow<List<SearchData>> = searchRepository.getSearchResult(query, page, sort)
+        .withFavoriteList(favoriteRepository.favoriteList)
 
-        Log.d("로그", "Call GetSearchResultWithFavoriteUseCase")
-
-        var searchList: MutableList<SearchData> = mutableListOf()
-        var favoriteList: MutableList<SearchData> = mutableListOf()
-
-        withContext(Dispatchers.IO) {
-            launch {
-                getSearchResultUseCase(query, page, sort)
-                    .collectLatest { search ->
-                        Log.d("로그", "searchList 2 : $search")
-                        searchList.addAll(search)
-                    }
-            }
-
-            launch {
-                getFavoriteListUseCase()
-                    .collectLatest { favorite ->
-                        Log.d("로그", "favoriteList 2 : $favorite")
-                        favoriteList.addAll(favorite)
-                    }
+    private fun Flow<List<SearchData>>.withFavoriteList(favoriteList: Flow<List<SearchData>>): Flow<List<SearchData>> =
+        combine(favoriteList) { searchResult, favoriteResult ->
+            searchResult.map {
+                it.copy().apply {
+                    isFavorite = it in favoriteResult
+                }
             }
         }
-
-        Log.d("로그", "searchList : $searchList")
-        Log.d("로그", "favoriteList : $favoriteList")
-
-
-        val searchListWithFavoriteList = searchList.map {
-            it.apply {
-                isFavorite = favoriteList.contains(it)
-            }
-        }
-
-        send(searchListWithFavoriteList)
-    }
 }
