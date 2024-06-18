@@ -34,12 +34,10 @@ import com.somnwal.android.kakaobank.app.feature.favorite.navigation.favoriteNav
 import com.somnwal.android.kakaobank.app.feature.main.ui.navigation.MainNavigator
 import com.somnwal.android.kakaobank.app.feature.main.ui.navigation.MainTab
 import com.somnwal.android.kakaobank.app.feature.main.ui.navigation.rememberMainNavigator
-import com.somnwal.android.kakaobank.app.feature.search.navigation.searchDetailNavGraph
 import com.somnwal.android.kakaobank.app.feature.search.navigation.searchNavGraph
 import com.somnwal.kakaobank.app.feature.main.R
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
-import java.net.URLEncoder
 
 @Composable
 internal fun MainScreen(
@@ -79,11 +77,6 @@ internal fun MainScreen(
                         onShowErrorSnackbar = onShowErrorSnackBar,
                         isDarkTheme = isDarkTheme,
                         onChangeTheme = onChangeTheme
-                    )
-
-                    searchDetailNavGraph(
-                        padding = padding,
-                        onShowErrorSnackbar = onShowErrorSnackBar
                     )
 
                     favoriteNavGraph(

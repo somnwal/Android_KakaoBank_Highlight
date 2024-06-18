@@ -11,7 +11,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
-    val isDarkTheme = settingsRepository.flowIsDarkTheme()
+    val isDarkTheme = settingsRepository.isDarkTheme
 
     fun updateIsDarkTheme(isDarkTheme: Boolean) =
         viewModelScope.launch {

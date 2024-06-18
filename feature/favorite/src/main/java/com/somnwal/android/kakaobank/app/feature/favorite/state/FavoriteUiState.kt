@@ -17,11 +17,6 @@ sealed interface FavoriteUiState {
 
     @Immutable
     data class Success(
-        val data: ImmutableList<SearchData>
-    ) : FavoriteUiState
-
-    @Immutable
-    data class Error(
-        val data: Throwable?
+        val data: List<SearchData>
     ) : FavoriteUiState
 }

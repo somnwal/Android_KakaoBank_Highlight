@@ -38,8 +38,6 @@ internal fun FavoriteRoute(
 
     }
 
-    viewModel.getFavoriteList()
-
     FavoriteScreen(
         padding = padding,
         uiState = uistate,
@@ -63,34 +61,20 @@ internal fun FavoriteScreen(
             .fillMaxSize(),
     ) {
         when(uiState) {
-            FavoriteUiState.Idle -> {
-
-            }
-            FavoriteUiState.Empty -> {
-
-            }
-            FavoriteUiState.Loading -> {
-
-            }
-
             is FavoriteUiState.Success -> {
-                val data = uiState.data
-
                 FavoriteListContent(
-                    items = data,
+                    uiState = uiState,
                     onUpdateIsFavorite = onUpdateIsFavorite
                 )
             }
-            is FavoriteUiState.Error -> {
-
-            }
+            else -> Unit
         }
     }
 }
 
 @Composable
 internal fun FavoriteListContent(
-    items: ImmutableList<SearchData>,
+    uiState: FavoriteUiState.Success,
     modifier: Modifier = Modifier,
     onUpdateIsFavorite: (SearchData) -> Unit,
 ) {
@@ -98,10 +82,13 @@ internal fun FavoriteListContent(
         modifier = modifier
             .fillMaxSize()
     ) {
-        itemsIndexed(items = items) { index, item ->
+        items(
+            count = uiState.data.size,
+            key = { index -> index }
+        ) { index ->
             FavoriteItemCard(
-                data = item,
-                onUpdateIsFavorite = onUpdateIsFavorite
+                data = uiState.data[index],
+                onUpdateIsFavorite = onUpdateIsFavorite,
             )
         }
     }

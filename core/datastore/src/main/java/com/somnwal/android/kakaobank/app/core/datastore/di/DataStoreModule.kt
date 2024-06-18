@@ -2,8 +2,11 @@ package com.somnwal.android.kakaobank.app.core.datastore.di
 
 import android.content.Context
 import androidx.datastore.core.DataStore
+import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import com.somnwal.android.kakaobank.app.core.datastore.util.KakaoPreferencesSerializer
+import com.somnwal.kakaobank.app.core.datastore.KakaoPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,24 +19,15 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DataStoreModule {
 
-    private const val SETTING_DATASTORE_NAME = "SETTINGS_PREFERENCES"
-    private val Context.settingDatastore by preferencesDataStore(SETTING_DATASTORE_NAME)
-
-    private const val FAVORITE_DATASTORE_NAME = "FAVORITE_PREFERENCES"
-    private val Context.favoriteDataStore by preferencesDataStore(FAVORITE_DATASTORE_NAME)
-
-    @Provides
-    @Singleton
-    @Named("settings")
-    fun provideSettingsDataStore(
-        @ApplicationContext context: Context
-    ): DataStore<Preferences> = context.settingDatastore
+    private const val KAKAO_DATASTORE_FILENAME = "kakao_preferences.pb"
+    private val Context.kakaoDataStore : DataStore<KakaoPreferences> by dataStore(
+        fileName = KAKAO_DATASTORE_FILENAME,
+        serializer = KakaoPreferencesSerializer
+    )
 
     @Provides
     @Singleton
-    @Named("favorite")
-    fun provideFavoriteDataStore(
-        @ApplicationContext context: Context
-    ): DataStore<Preferences> = context.favoriteDataStore
-
+    fun provideKakaoDataStore(
+        @ApplicationContext context: Context,
+    ): DataStore<KakaoPreferences> = context.kakaoDataStore
 }

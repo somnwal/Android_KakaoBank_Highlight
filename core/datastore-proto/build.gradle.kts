@@ -1,10 +1,12 @@
+import com.somnwal.kakaobank.app.common.setNamespace
+
 plugins {
     id("somnwal.kakaobank.android.library")
     alias(libs.plugins.protobuf)
 }
 
 android {
-    namespace = "com.somnwal.kakaobank.app.core.datastore.proto"
+    setNamespace("core.datastore.proto")
 }
 
 protobuf {
@@ -26,7 +28,7 @@ protobuf {
 }
 
 androidComponents.beforeVariants {
-    android.sourceSets.register(it.name) {
+    android.sourceSets.getByName(it.name) {
         val buildDir = layout.buildDirectory.get().asFile
         java.srcDir(buildDir.resolve("generated/source/proto/${it.name}/java"))
         kotlin.srcDir(buildDir.resolve("generated/source/proto/${it.name}/kotlin"))

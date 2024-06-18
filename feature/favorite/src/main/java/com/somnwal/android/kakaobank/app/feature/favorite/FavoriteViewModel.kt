@@ -11,10 +11,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,26 +29,24 @@ class FavoriteViewModel @Inject constructor(
     private val updateIsFavoriteUseCase: UpdateIsFavoriteUseCase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<FavoriteUiState>(FavoriteUiState.Idle)
+    val uiState: StateFlow<FavoriteUiState> =
+        getFavoriteListUseCase()
+            .map<List<SearchData>, FavoriteUiState> { favoriteList ->
+                FavoriteUiState.Success(
+                    data = favoriteList
+                )
+            }.catch { err ->
+                _errorState.emit(err)
+            }.stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = FavoriteUiState.Idle
+            )
 
-    val uiState: StateFlow<FavoriteUiState>
-        get() = _uiState.asStateFlow()
+    private val _errorState = MutableSharedFlow<Throwable>()
 
-    private val _errorFlow = MutableSharedFlow<Throwable>()
-
-    val errorFlow
-        get() = _errorFlow.asSharedFlow()
-
-    fun getFavoriteList() {
-        viewModelScope.launch {
-            getFavoriteListUseCase()
-                .collectLatest { favoriteList ->
-                    _uiState.value = FavoriteUiState.Success(
-                        data = favoriteList.toPersistentList()
-                    )
-                }
-        }
-    }
+    val errorState
+        get() = _errorState.asSharedFlow()
 
     fun updateIsFavorite(searchData: SearchData) {
         viewModelScope.launch {

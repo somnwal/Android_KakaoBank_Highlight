@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    setNamespace("core.design")
+    setNamespace("core.designsystem")
 }
 
 dependencies {

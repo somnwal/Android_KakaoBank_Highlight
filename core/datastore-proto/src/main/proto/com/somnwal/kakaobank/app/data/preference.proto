@@ -19,9 +19,9 @@ syntax = "proto3";
 option java_package = "com.somnwal.kakaobank.app.core.datastore";
 option java_multiple_files = true;
 
-message Preferences {
-    reserved 2;
+message KakaoPreferences {
+    reserved 1;
 
-    bool isDarkTheme = 1
-    map<string, bool> favoriteList = 2;
+    bool isDarkTheme = 2;
+    map<string, string> favoriteList = 3;
 }

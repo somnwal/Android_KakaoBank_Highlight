@@ -35,8 +35,8 @@ class GetSearchResultWithFavoriteUseCase @Inject constructor(
     private fun Flow<List<SearchData>>.withFavoriteList(favoriteList: Flow<List<SearchData>>): Flow<List<SearchData>> =
         combine(favoriteList) { searchResult, favoriteResult ->
             searchResult.map {
-                it.copy().apply {
-                    isFavorite = it in favoriteResult
+                it.apply {
+                    this.isFavorite = this in favoriteResult
                 }
             }
         }

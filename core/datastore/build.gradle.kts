@@ -7,13 +7,18 @@ plugins {
 }
 
 android {
+    defaultConfig {
+        consumerProguardFiles("consumer-rules.pro")
+    }
+
     setNamespace("core.datastore")
 }
 
 dependencies {
     implementation(projects.core.model)
-
+    implementation(projects.core.datastoreProto)
     implementation(libs.androidx.datastore)
+
     implementation(libs.kotlinx.serialization.json)
 
 }

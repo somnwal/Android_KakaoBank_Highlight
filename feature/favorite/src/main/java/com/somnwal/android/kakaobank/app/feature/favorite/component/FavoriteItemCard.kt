@@ -45,25 +45,11 @@ import com.somnwal.kakaobank.app.core.designsystem.theme.KakaoTheme
 fun FavoriteItemCard(
     modifier: Modifier = Modifier,
     data: SearchData,
-    isExpanded: Boolean = false,
     onUpdateIsFavorite: (SearchData) -> Unit
 ) {
     val localDensity = LocalDensity.current
 
-    var imageUrl by remember { mutableStateOf(data.thumbnailUrl) }
-    var imageLoading by remember { mutableStateOf(false) }
-
-    var imageDisplayRatio by rememberSaveable { mutableFloatStateOf(0.3f) }
-
-    LaunchedEffect(isExpanded) {
-        if (isExpanded) {
-            imageDisplayRatio = 1f
-            imageUrl = data.url
-        } else {
-            imageDisplayRatio = 0.3f
-            imageUrl = data.thumbnailUrl
-        }
-    }
+    val imageDisplayRatio = 0.3f
 
     Card(
         modifier = modifier
