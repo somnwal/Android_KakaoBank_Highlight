@@ -19,6 +19,8 @@ class DefaultFavoriteRepository @Inject constructor(
         kakaoPreferencesDataSource.prefs.map { prefs ->
             prefs.favoriteList.toList().map { data ->
                 Json.decodeFromString<SearchData>(data)
+            }.sortedByDescending {
+                it.datetime
             }
         }
 
