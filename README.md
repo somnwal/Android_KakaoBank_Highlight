@@ -46,7 +46,7 @@
 | :feature:main      | 앱 공통 화면 구현                              |
 | :feature:search    | 검색 화면 구현                                |
 | :feature:favorite  | 보관함 화면 구현                               |
-
+| :feature:web       | 웹 화면 구현                                  |
 
 ![멀티모듈 프로젝트 구조](https://github.com/somnwal/Android_KakaoBank_Highlight/blob/main/project.png?raw=true)
 
