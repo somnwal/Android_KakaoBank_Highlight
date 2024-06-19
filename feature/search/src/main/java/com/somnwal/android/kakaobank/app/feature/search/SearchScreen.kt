@@ -36,7 +36,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.somnwal.android.kakaobank.app.data.model.search.SearchData
 import com.somnwal.android.kakaobank.app.data.model.search.SearchDataType
 import com.somnwal.android.kakaobank.app.feature.search.component.KakaoSearchBar
-import com.somnwal.kakaobank.app.core.designsystem.component.SearchDetailBottomSheet
 import com.somnwal.android.kakaobank.app.feature.search.component.SearchItemCard
 import com.somnwal.android.kakaobank.app.feature.search.state.SearchUiState
 import com.somnwal.kakaobank.app.core.designsystem.component.AppIcons
@@ -50,6 +49,7 @@ internal fun SearchRoute(
     onShowErrorSnackBar: (Throwable?) -> Unit,
     isDarkTheme: Boolean,
     onChangeTheme: (Boolean) -> Unit,
+    onItemClick: (SearchData) -> Unit,
     viewModel: SearchViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -69,6 +69,7 @@ internal fun SearchRoute(
         onSearch = viewModel::onSearch,
         onNextPage = viewModel::onNextPage,
         onUpdateIsFavorite = viewModel::updateIsFavorite,
+        onItemClick = onItemClick
     )
 }
 
@@ -80,7 +81,8 @@ fun SearchScreen(
     uiState: SearchUiState,
     onSearch: (String) -> Unit,
     onNextPage: () -> Unit,
-    onUpdateIsFavorite: (SearchData) -> Unit
+    onUpdateIsFavorite: (SearchData) -> Unit,
+    onItemClick: (SearchData) -> Unit,
 ) {
     Column (
         modifier = Modifier
@@ -135,31 +137,13 @@ fun SearchScreen(
         ) {
             when(uiState) {
                 is SearchUiState.Success -> {
-                    var isSearchDetailBottomSheetOpen by remember { mutableStateOf(false) }
-                    var selected by remember { mutableStateOf<SearchData?>(null) }
-
                     SearchSuccessContent(
                         uiState = uiState,
                         listState = listState,
                         onNextPage = onNextPage,
                         onUpdateIsFavorite = onUpdateIsFavorite,
-                        onItemClick = { searchData ->
-                            selected = searchData
-                            isSearchDetailBottomSheetOpen = true
-                        }
+                        onItemClick = onItemClick
                     )
-
-                    selected?.let {
-                        if(isSearchDetailBottomSheetOpen) {
-                            SearchDetailBottomSheet(
-                                data = selected!!,
-                                onUpdateIsFavorite = onUpdateIsFavorite,
-                                closeSheet = {
-                                    isSearchDetailBottomSheetOpen = false
-                                }
-                            )
-                        }
-                    }
                 }
                 // 비어있을 때와 에러가 발생했을 때
                 SearchUiState.Empty,
@@ -287,6 +271,7 @@ fun SearchScreenSuccessPreview() {
             onSearch = { },
             onNextPage = { /*TODO*/ },
             onUpdateIsFavorite = { },
+            onItemClick = { }
         )
     }
 }
@@ -306,6 +291,7 @@ fun SearchScreenEmptyPreview() {
             onSearch = { },
             onNextPage = { /*TODO*/ },
             onUpdateIsFavorite = { },
+            onItemClick = { }
         )
     }
 }
@@ -325,6 +311,7 @@ fun SearchScreenFailPreview() {
             onSearch = { },
             onNextPage = { /*TODO*/ },
             onUpdateIsFavorite = { },
+            onItemClick = { }
         )
     }
 }

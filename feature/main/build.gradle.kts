@@ -11,6 +11,7 @@ android {
 dependencies {
     implementation(projects.feature.search)
     implementation(projects.feature.favorite)
+    implementation(projects.feature.web)
 
     implementation(projects.core.dataApi)
 

@@ -35,4 +35,5 @@ include(
     ":feature:main",
     ":feature:search",
     ":feature:favorite",
+    ":feature:web",
 )

@@ -5,6 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.somnwal.android.kakaobank.app.data.model.search.SearchData
 import com.somnwal.android.kakaobank.app.feature.search.SearchRoute
 
 fun NavController.navigateSearch(
@@ -20,7 +21,8 @@ fun NavGraphBuilder.searchNavGraph(
     padding: PaddingValues,
     onShowErrorSnackbar: (Throwable?) -> Unit,
     isDarkTheme: Boolean,
-    onChangeTheme: (Boolean) -> Unit
+    onChangeTheme: (Boolean) -> Unit,
+    onItemClick: (SearchData) -> Unit,
 ) {
     composable(
         route = SearchRoute.ROUTE
@@ -29,7 +31,8 @@ fun NavGraphBuilder.searchNavGraph(
             padding = padding,
             onShowErrorSnackBar = onShowErrorSnackbar,
             isDarkTheme = isDarkTheme,
-            onChangeTheme = onChangeTheme
+            onChangeTheme = onChangeTheme,
+            onItemClick = onItemClick,
         )
     }
 }

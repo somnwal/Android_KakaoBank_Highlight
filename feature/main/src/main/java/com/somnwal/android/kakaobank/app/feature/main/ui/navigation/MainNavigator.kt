@@ -11,6 +11,7 @@ import androidx.navigation.navOptions
 import com.somnwal.android.kakaobank.app.data.model.search.SearchData
 import com.somnwal.android.kakaobank.app.feature.favorite.navigation.navigateFavorite
 import com.somnwal.android.kakaobank.app.feature.search.navigation.navigateSearch
+import com.somnwal.kakaobank.app.feature.web.navigation.navigateWeb
 
 internal class MainNavigator(
     val navController: NavHostController
@@ -53,6 +54,15 @@ internal class MainNavigator(
     fun shouldShowBottomBar(): Boolean {
         val currentRoute = currentDestination?.route ?: return false
         return currentRoute in MainTab
+    }
+
+    fun navigateWeb(url: String) {
+        val navOptions = navOptions {
+            launchSingleTop = true
+            restoreState = true
+        }
+
+        navController.navigateWeb(url, navOptions)
     }
 }
 

@@ -36,8 +36,10 @@ import com.somnwal.android.kakaobank.app.feature.main.ui.navigation.MainTab
 import com.somnwal.android.kakaobank.app.feature.main.ui.navigation.rememberMainNavigator
 import com.somnwal.android.kakaobank.app.feature.search.navigation.searchNavGraph
 import com.somnwal.kakaobank.app.feature.main.R
+import com.somnwal.kakaobank.app.feature.web.navigation.webNavGraph
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
+import java.net.URLEncoder
 
 @Composable
 internal fun MainScreen(
@@ -76,10 +78,20 @@ internal fun MainScreen(
                         padding = padding,
                         onShowErrorSnackbar = onShowErrorSnackBar,
                         isDarkTheme = isDarkTheme,
-                        onChangeTheme = onChangeTheme
+                        onChangeTheme = onChangeTheme,
+                        onItemClick = { searchData ->
+                            navigator.navigateWeb(
+                                url = URLEncoder.encode(searchData.url, "utf-8")
+                            )
+                        }
                     )
 
                     favoriteNavGraph(
+                        padding = padding,
+                        onShowErrorSnackbar = onShowErrorSnackBar
+                    )
+
+                    webNavGraph(
                         padding = padding,
                         onShowErrorSnackbar = onShowErrorSnackBar
                     )
