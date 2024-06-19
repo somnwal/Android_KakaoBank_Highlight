@@ -26,6 +26,7 @@ import javax.inject.Inject
 
 const val SEARCH_QUERY = "SEARCH_QUERY"
 const val SEARCH_PAGE = "SEARCH_PAGE"
+const val SHOULD_REFRESH = "SHOULD_REFRESH"
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
@@ -34,21 +35,24 @@ class SearchViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val searchQuery = savedStateHandle.getStateFlow(key = SEARCH_QUERY, initialValue = "")
-    val searchPage = savedStateHandle.getStateFlow(key = SEARCH_PAGE, initialValue = 1)
+    var searchQuery = savedStateHandle.getStateFlow(key = SEARCH_QUERY, initialValue = "")
+    var searchPage = savedStateHandle.getStateFlow(key = SEARCH_PAGE, initialValue = 1)
+    var shouldRefresh = savedStateHandle.getStateFlow(key = SHOULD_REFRESH, initialValue = 1)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val uiState : StateFlow<SearchUiState> =
-        searchQuery.flatMapLatest { query ->
-            searchPage.flatMapLatest { page ->
-                getSearchResultWithFavoriteUseCase(query, page)
-                    .map<List<SearchData>, SearchUiState> { data ->
-                        SearchUiState.Success(
-                            data = data
-                        )
-                    }.catch { err ->
-                        _errorState.value = err
-                    }
+    var uiState : StateFlow<SearchUiState> =
+        shouldRefresh.flatMapLatest { _ ->
+            searchQuery.flatMapLatest { query ->
+                searchPage.flatMapLatest { page ->
+                    getSearchResultWithFavoriteUseCase(query, page)
+                        .map<List<SearchData>, SearchUiState> { data ->
+                            SearchUiState.Success(
+                                data = data
+                            )
+                        }.catch { err ->
+                            _errorState.value = err
+                        }
+                }
             }
         }.stateIn(
             scope = viewModelScope,
@@ -56,8 +60,8 @@ class SearchViewModel @Inject constructor(
             initialValue = SearchUiState.Idle
         )
 
-    private val _errorState = MutableStateFlow<Throwable?>(null)
-    val errorState : StateFlow<Throwable?> = _errorState.asStateFlow()
+    private var _errorState = MutableStateFlow<Throwable?>(null)
+    var errorState : StateFlow<Throwable?> = _errorState.asStateFlow()
 
     fun onSearch(query: String, page: Int = 1) {
         savedStateHandle[SEARCH_QUERY] = query
@@ -71,6 +75,7 @@ class SearchViewModel @Inject constructor(
     fun updateIsFavorite(searchData: SearchData) {
         viewModelScope.launch {
             updateIsFavoriteUseCase(searchData, !searchData.isFavorite)
+            savedStateHandle[SHOULD_REFRESH] = shouldRefresh.value + 1
         }
     }
 }

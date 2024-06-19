@@ -25,8 +25,7 @@ data class SearchData (
     val thumbnailUrl: String,
     val url: String,
 
-    val datetime: String
-) {
+    val datetime: String,
     var isFavorite: Boolean = false
-}
+)
 

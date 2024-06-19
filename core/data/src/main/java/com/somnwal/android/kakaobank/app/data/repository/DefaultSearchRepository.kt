@@ -55,8 +55,6 @@ class DefaultSearchRepository @Inject constructor(
         val mergedSearchResult = (savedSearchDataList + imageResultList + videoResultList)
         savedSearchDataList = mergedSearchResult
 
-        Log.d("로그", "savedSearchDataList : ${savedSearchDataList}")
-
         emit(
             mergedSearchResult.sortedByDescending {
                 it.datetime

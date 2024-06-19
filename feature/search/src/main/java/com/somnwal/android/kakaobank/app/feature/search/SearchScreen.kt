@@ -209,6 +209,7 @@ internal fun SearchSuccessContent(
             count = uiState.data.size,
             key = { index -> index }
         ) { index ->
+
             SearchItemCard(
                 data = uiState.data[index],
                 onUpdateIsFavorite = onUpdateIsFavorite,
