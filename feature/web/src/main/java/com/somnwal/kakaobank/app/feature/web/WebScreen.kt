@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.util.Log
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.PaddingValues
@@ -25,8 +26,6 @@ internal fun WebRoute(
 ) {
     val url by viewModel.url.collectAsState()
 
-    Log.d("로그", "$url")
-
     var loading by remember {
         mutableStateOf(false)
     }
@@ -35,6 +34,8 @@ internal fun WebRoute(
         factory = { ctx ->
             WebView(ctx).apply {
                 settings.javaScriptEnabled = true
+                settings.loadWithOverviewMode = true
+                settings.useWideViewPort = true
 
                 webViewClient = object : WebViewClient() {
                     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {

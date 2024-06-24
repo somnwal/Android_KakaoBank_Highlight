@@ -46,8 +46,14 @@ internal class MainNavigator(
         }
     }
 
-    private fun popBackStack() {
+    fun popBackStack() {
         navController.popBackStack()
+    }
+
+    @Composable
+    fun shouldShowAppBar(): Boolean {
+        val currentRoute = currentDestination?.route ?: return false
+        return currentRoute !in MainTab
     }
 
     @Composable

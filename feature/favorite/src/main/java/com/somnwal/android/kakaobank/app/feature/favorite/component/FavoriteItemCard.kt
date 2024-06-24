@@ -45,7 +45,8 @@ import com.somnwal.kakaobank.app.core.designsystem.theme.KakaoTheme
 fun FavoriteItemCard(
     modifier: Modifier = Modifier,
     data: SearchData,
-    onUpdateIsFavorite: (SearchData) -> Unit
+    onUpdateIsFavorite: (SearchData) -> Unit,
+    onItemClick: (SearchData) -> Unit,
 ) {
     val localDensity = LocalDensity.current
 
@@ -61,7 +62,7 @@ fun FavoriteItemCard(
                 .wrapContentHeight()
                 .clickable (
                     onClick = {
-
+                        onItemClick(data)
                     }
                 )
         ) {
@@ -172,7 +173,8 @@ fun FavoriteItemImageCardPreview() {
                     thumbnailUrl = "https://avatars.githubusercontent.com/u/90139018?v=4",
                     datetime = "2024-01-01",
                 ),
-                onUpdateIsFavorite = { }
+                onUpdateIsFavorite = { },
+                onItemClick = { }
             )
         }
     }
@@ -198,7 +200,8 @@ fun FavoriteItemVideoCardPreview() {
                     thumbnailUrl = "https://avatars.githubusercontent.com/u/90139018?v=4",
                     datetime = "2024-01-01",
                 ),
-                onUpdateIsFavorite = { }
+                onUpdateIsFavorite = { },
+                onItemClick = { }
             )
         }
     }

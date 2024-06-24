@@ -30,6 +30,7 @@ import kotlinx.collections.immutable.ImmutableList
 internal fun FavoriteRoute(
     padding: PaddingValues,
     onShowErrorSnackbar: (Throwable?) -> Unit,
+    onItemClick: (SearchData) -> Unit,
     viewModel: FavoriteViewModel = hiltViewModel()
 ) {
     val uistate by viewModel.uiState.collectAsStateWithLifecycle()
@@ -43,7 +44,8 @@ internal fun FavoriteRoute(
         uiState = uistate,
         onUpdateIsFavorite = { searchData ->
             viewModel.updateIsFavorite(searchData)
-        }
+        },
+        onItemClick = onItemClick
     )
 }
 
@@ -51,7 +53,8 @@ internal fun FavoriteRoute(
 internal fun FavoriteScreen(
     padding: PaddingValues,
     uiState: FavoriteUiState,
-    onUpdateIsFavorite: (SearchData) -> Unit
+    onUpdateIsFavorite: (SearchData) -> Unit,
+    onItemClick: (SearchData) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -64,7 +67,8 @@ internal fun FavoriteScreen(
             is FavoriteUiState.Success -> {
                 FavoriteListContent(
                     uiState = uiState,
-                    onUpdateIsFavorite = onUpdateIsFavorite
+                    onUpdateIsFavorite = onUpdateIsFavorite,
+                    onItemClick = onItemClick,
                 )
             }
             else -> Unit
@@ -77,6 +81,7 @@ internal fun FavoriteListContent(
     uiState: FavoriteUiState.Success,
     modifier: Modifier = Modifier,
     onUpdateIsFavorite: (SearchData) -> Unit,
+    onItemClick: (SearchData) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier
@@ -89,6 +94,7 @@ internal fun FavoriteListContent(
             FavoriteItemCard(
                 data = uiState.data[index],
                 onUpdateIsFavorite = onUpdateIsFavorite,
+                onItemClick = onItemClick,
             )
         }
     }

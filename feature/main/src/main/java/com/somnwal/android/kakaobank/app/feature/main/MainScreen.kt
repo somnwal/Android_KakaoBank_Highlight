@@ -13,8 +13,11 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -22,6 +25,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -35,12 +39,14 @@ import com.somnwal.android.kakaobank.app.feature.main.ui.navigation.MainNavigato
 import com.somnwal.android.kakaobank.app.feature.main.ui.navigation.MainTab
 import com.somnwal.android.kakaobank.app.feature.main.ui.navigation.rememberMainNavigator
 import com.somnwal.android.kakaobank.app.feature.search.navigation.searchNavGraph
+import com.somnwal.kakaobank.app.core.designsystem.component.AppIcons
 import com.somnwal.kakaobank.app.feature.main.R
 import com.somnwal.kakaobank.app.feature.web.navigation.webNavGraph
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import java.net.URLEncoder
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator(),
@@ -64,6 +70,25 @@ internal fun MainScreen(
     }
 
     Scaffold(
+        topBar = {
+            if (navigator.shouldShowAppBar()) {
+                TopAppBar(
+                    title = { Text("Web Screen") },
+                    navigationIcon = {
+                        IconButton(
+                            onClick = {
+                                navigator.popBackStack()
+                            }
+                        ) {
+                            Icon(
+                                imageVector = AppIcons.ICON_ARROW_BACK,
+                                contentDescription = "Close"
+                            )
+                        }
+                    },
+                )
+            }
+        },
         content = { padding ->
             Box(
                 modifier = Modifier
@@ -88,7 +113,12 @@ internal fun MainScreen(
 
                     favoriteNavGraph(
                         padding = padding,
-                        onShowErrorSnackbar = onShowErrorSnackBar
+                        onShowErrorSnackbar = onShowErrorSnackBar,
+                        onItemClick = { searchData ->
+                            navigator.navigateWeb(
+                                url = URLEncoder.encode(searchData.url, "utf-8")
+                            )
+                        }
                     )
 
                     webNavGraph(

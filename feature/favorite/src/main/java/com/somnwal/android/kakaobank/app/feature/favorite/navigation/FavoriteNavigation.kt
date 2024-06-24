@@ -5,6 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.somnwal.android.kakaobank.app.data.model.search.SearchData
 import com.somnwal.android.kakaobank.app.feature.favorite.FavoriteRoute
 
 fun NavController.navigateFavorite(navOptions: NavOptions) {
@@ -14,11 +15,13 @@ fun NavController.navigateFavorite(navOptions: NavOptions) {
 fun NavGraphBuilder.favoriteNavGraph(
     padding: PaddingValues,
     onShowErrorSnackbar: (Throwable?) -> Unit,
+    onItemClick: (SearchData) -> Unit,
 ) {
     composable(route = FavoriteRoute.ROUTE) {
         FavoriteRoute(
             padding = padding,
             onShowErrorSnackbar = onShowErrorSnackbar,
+            onItemClick = onItemClick
         )
     }
 }
